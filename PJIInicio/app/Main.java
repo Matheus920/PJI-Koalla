@@ -4,6 +4,7 @@ import app.view.Header;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -30,8 +31,8 @@ public class Main extends Application{
     public void start(Stage stage) {
         primaryStage = stage;
         primaryStage.setTitle("Portal de Simpósio Acadêmico");
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("koala1.png")));
         Scene scene = new Scene(root, 900, 700);
-        
         root.setTop(new Header().headerShow("Evento", "Aqui vai a descrição do evento"));
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         
