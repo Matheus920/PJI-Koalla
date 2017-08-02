@@ -3,6 +3,7 @@ package app.view;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -66,11 +67,14 @@ public class Login {
     
     private void setButtons() {
         sign.setFont(Font.font("Segoe UI", 15));
+        sign.setCursor(Cursor.HAND);
+        
         login.setFont(Font.font("Segoe UI", 15));
+        login.setCursor(Cursor.HAND);
         
         sign.setOnAction(e ->{
             stage.setTitle("Registrar");
-            stage.setScene(new Sign().registrarShow());
+            stage.setScene(new Sign().signShow());
             stage.centerOnScreen();
         });
     }
