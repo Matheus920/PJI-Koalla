@@ -9,9 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -38,7 +36,6 @@ public class Sign {
     private final Button sign =              new Button("Registrar");
     private final GridPane gridPane =        new GridPane();
     private final Scene scene =              new Scene(gridPane, 600, 600);
-    private final AnchorPane anchorPane =    new AnchorPane();
     private final Button btnFile =           new Button("...");
     private final Label lblFile =            new Label("Imagem de perfil:");
     private final Label lblDob =             new Label("Data de nascimento:");
@@ -88,7 +85,7 @@ public class Sign {
         GridPane.setMargin(tfName, new Insets(30, 0, 0, 0));
     }
     
-    public Scene registrarShow() {
+    public Scene signShow() {
         return scene;
     }
     
