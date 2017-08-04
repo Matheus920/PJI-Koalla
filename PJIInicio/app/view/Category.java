@@ -3,13 +3,14 @@ package app.view;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -45,6 +46,11 @@ public class Category {
             btn.setFont(Font.font("Segoe UI", 10));
             btn.setVisible(false);
             btn.setCursor(Cursor.HAND);
+            
+            btn.setOnAction(e -> {
+                showDeleteDialog();
+            });
+                
             
             anchorPane.getChildren().addAll(text, btn);
             AnchorPane.setRightAnchor(btn, 5.0);
@@ -93,11 +99,15 @@ public class Category {
        textField.setFont(Font.font("Segoe UI", 18));
        
        Button buttonOk = new Button("OK");
-       Button buttonCancel = new Button("Cancel");
+       Button buttonCancel = new Button("Cancelar");
        
        
        buttonOk.setFont(Font.font("Segoe UI", 18));
        buttonCancel.setFont(Font.font("Segoe UI", 18));
+       
+       buttonCancel.setOnAction(e -> {
+           stage.close();
+       });
        
        gridPane.setAlignment(Pos.CENTER);
        HBox hbox = new HBox(buttonOk, buttonCancel);
@@ -120,4 +130,24 @@ public class Category {
        stage.setScene(scene);
        stage.showAndWait();
    }
+   private void showDeleteDialog(){
+       
+       Alert alert = new Alert(AlertType.CONFIRMATION,
+               "Você está prestes a realizar uma exclusão. \nDeseja confirmar?",
+                ButtonType.YES, ButtonType.NO);
+       alert.setTitle("Atenção");
+       alert.setHeaderText(null);
+       
+       Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+       
+       stage.getIcons().add(new Image(getClass().getResourceAsStream("koala1.png")));
+       
+       stage.showAndWait();
+       
+       if(alert.getResult() == ButtonType.YES){
+           int index = list.getSelectionModel().getSelectedIndex();
+           list.getItems().remove(index);
+       }
+   }
 }
+
