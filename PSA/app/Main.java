@@ -1,6 +1,7 @@
 package app;
 
 import app.view.Category;
+import app.view.Event;
 import app.view.Header;
 import app.view.Menu;
 import javafx.application.Application;
@@ -37,9 +38,10 @@ public class Main extends Application{
         primaryStage = stage;
         primaryStage.setTitle("Portal de Simpósio Acadêmico");
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("koala1.png")));
+        
         Scene scene = new Scene(root, 1200, 750);
+        
         root.setTop(header.headerShow());
-        categoryShow();
         root.setLeft(new Menu().menuShow());
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         
@@ -53,4 +55,8 @@ public class Main extends Application{
         ListView center = new Category().showCategory();
         root.setCenter(center);
     }
+    
+    public static void eventShow() {
+        root.setCenter(new Event().getBorderPane());
+    } 
 }
