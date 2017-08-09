@@ -1,6 +1,6 @@
 package app.view;
 
-import javafx.geometry.Insets;
+import app.Main;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -31,6 +31,7 @@ public class Menu {
         btnEvento.setPrefSize(100, 70);
         btnEvento.setCursor(Cursor.HAND);
         btnEvento.setOnAction(e->{
+            Main.eventShow();
         });
         
         btnComite.setFont(Font.font("Segoe UI", 15));
@@ -51,7 +52,7 @@ public class Menu {
         btnCategoria.setPrefSize(100, 70);
         btnCategoria.setCursor(Cursor.HAND);
         btnCategoria.setOnAction(e->{
-            
+            Main.categoryShow();
         });
         
         btnPalestrante.setFont(Font.font("Segoe UI", 15));
