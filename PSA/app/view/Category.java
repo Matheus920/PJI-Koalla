@@ -33,8 +33,8 @@ public class Category {
     }
     
     private void setItems(){
-        setContent("Luka", "To", "Nem", "Ai", "Pode", "Falar", "Dos", "Seus", "Problemas", "To", "Nem", "Ai", "Pitty", "As", "Mais", "Tocadas",
-        "Rola", "Rolinha", "Roluda", "Rolão", "Rafaela");
+        setContent("Thomas", "Turbando", "Oscar", "Alho", "Isadora", "Pinto", "Jacinto", "Leitte", "Aquino", "Rego", "Paula", "Tejando", "Ana", "Konda", "Cuca", "Beludo",
+        "Diva", "Aginaberta", "Tati", "Komenno", "Rafaela");
     }
     
     private void setContent(String... content) {
@@ -80,9 +80,9 @@ public class Category {
                System.out.println(list.getSelectionModel().getSelectedIndex());
                showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText());
             }
-            
-            
         }); 
+        
+        list.setCursor(Cursor.HAND);
     }
    private void showEditDialog(String editText){
       
@@ -149,5 +149,13 @@ public class Category {
            list.getItems().remove(index);
        }
    }
+   
+   public ObservableList<String> getDataCategory() {
+       ObservableList<String> itemsName = FXCollections.observableArrayList();
+       setItems();
+       items.forEach((a) -> {
+           itemsName.add(((Text)a.getChildren().get(0)).getText());
+        });
+    return itemsName;
+   }
 }
-
