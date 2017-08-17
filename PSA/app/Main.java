@@ -1,9 +1,11 @@
 package app;
 
-import app.view.Category;
-import app.view.Event;
-import app.view.Header;
-import app.view.Menu;
+import app.control.PrivilegeType;
+import app.control.PrivilegiesTest;
+import app.view.CategoryView;
+import app.view.EventView;
+import app.view.HeaderView;
+import app.view.MenuView;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -19,7 +21,7 @@ import javafx.stage.Stage;
 public class Main extends Application{
     private static Stage primaryStage = new Stage();
     private static BorderPane root = new BorderPane();
-    private static final Header header = new Header("Evento", "Aqui vai a descrição do evento");
+    private static final HeaderView header = new HeaderView("Evento", "Aqui vai a descrição do evento");
     
     public static void main(String[] args) {
         launch(args);
@@ -40,9 +42,9 @@ public class Main extends Application{
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("koala1.png")));
         
         Scene scene = new Scene(root, 1200, 750);
-        
         root.setTop(header.headerShow());
-        root.setLeft(new Menu().menuShow());
+        PrivilegiesTest test = new PrivilegiesTest(PrivilegeType.ADMIN);
+        root.setLeft(new MenuView(test).menuShow());
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         
         primaryStage.setScene(scene);
@@ -52,11 +54,11 @@ public class Main extends Application{
     public static void categoryShow(){
         header.setTitle("Categoria");
         header.setSubtitle("Lista de categorias que englobam os eventos");
-        ListView center = new Category().showCategory();
+        ListView center = new CategoryView().showCategory();
         root.setCenter(center);
     }
     
     public static void eventShow() {
-        root.setCenter(new Event().getBorderPane());
+        root.setCenter(new EventView().getBorderPane());
     } 
 }
