@@ -23,7 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import app.control.CRUDCategoryInterface;
+import app.control.interfaces.CRUDCategoryInterface;
 
 public class CategoryView {
     private final ObservableList<AnchorPane> items  = FXCollections.observableArrayList();

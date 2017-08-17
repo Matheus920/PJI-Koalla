@@ -16,7 +16,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -40,10 +39,9 @@ public class EventView {
     private final RadioButton rbClosed = new RadioButton("Encerrados");
     private final BorderPane borderPane = new BorderPane();
     private final Button btnConfirm = new Button("Pesquisar");
-    private final ScrollPane scrollPane = new ScrollPane();
     private final VBox vbox = new VBox(2);
     private final HBox hbox = new HBox(2);
-    
+    private int pg = 1;
     public EventView() {
         
         setPositions();
@@ -56,9 +54,11 @@ public class EventView {
         borderPane.setTop(hbox);
         
         setCenter();
+        setBottom();
         
-        borderPane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, BorderStrokeStyle.SOLID,
-                BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, CornerRadii.EMPTY, new BorderWidths(1), Insets.EMPTY)));
+        borderPane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.WHITE, Color.WHITE, Color.BLACK, BorderStrokeStyle.SOLID,
+                BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1), Insets.EMPTY)));
+    
     }
     
     public BorderPane getBorderPane() {
@@ -95,7 +95,6 @@ public class EventView {
     private void setFields() { 
         tfSearch.setFont(Font.font("Segoe UI", 12));
         cbCategory.setPrefWidth(150);
-        
     }
     
     private void setPositions(){
@@ -114,16 +113,26 @@ public class EventView {
         HBox.setMargin(vbox, new Insets(10, 0, 0 ,0));
         HBox.setMargin(btnConfirm, new Insets(15, 0, 0, 20));
         
-        vbox.setPadding(new Insets(0, 0, 0 , 15));
+        vbox.setPadding(new Insets(0, 0, 20, 15));
+        
+        hbox.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, 
+                BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE,
+                CornerRadii.EMPTY, new BorderWidths(1), Insets.EMPTY)));
     }
     
     private StackPane getStackPane() {
         
         StackPane stackPane = new StackPane();
         Label txtTitulo = new Label("Dia especial das Abelhas");
-        Label txtTeste = new Label("Descrição: Hoje podemos analisar uma grande e bela rola");
+        Label txtTeste = new Label("Descrição: Hoje podemos analisar uma grande e bela abelha");
         HBox hbox = new HBox();
         VBox vbox = new VBox(5);
+        
+        txtTitulo.setCursor(Cursor.HAND);
+        txtTitulo.setOnMouseClicked(e -> {
+            // TODO: chamar tela de simposio
+            System.out.println("Simpósio");
+        });
         
         txtTitulo.setFont(Font.font("Segoe UI", 20));
         txtTeste.setFont(Font.font("Segoe UI", 15));
@@ -135,25 +144,49 @@ public class EventView {
         vbox.setAlignment(Pos.CENTER);
         VBox.setMargin(hbox, new Insets(0, 0, 0, 10));
         stackPane.getChildren().add(vbox);
-       
-        stackPane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.WHITE, Color.WHITE, Color.BLACK, 
-                BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID,
+        
+        stackPane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, 
+                BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE,
                 CornerRadii.EMPTY, new BorderWidths(1), Insets.EMPTY)));
         
         stackPane.setPadding(new Insets(10, 0, 0, 0));
+        stackPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         
         return stackPane;
     }
     
     private void setCenter() {
-        ObservableList<StackPane> center = FXCollections.observableArrayList();
-        center.add(getStackPane());
-        center.add(getStackPane());
-        VBox vbox1 = new VBox();
-        vbox1.getChildren().add(center.get(0));
-        vbox1.getChildren().add(center.get(1));
+        ScrollPane scrollPane = new ScrollPane();
+        VBox vbox1 = new VBox(10);
+        vbox1.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        for(int i = 0; i < 40; i++)
+            vbox1.getChildren().add(getStackPane());
         
-        borderPane.setCenter(vbox1);
+        scrollPane.setContent(vbox1);
+        
+        vbox1.prefWidthProperty().bind(scrollPane.widthProperty().subtract(15));
+        
+        borderPane.setCenter(scrollPane);
+        
         BorderPane.setMargin(vbox1, new Insets(10, 0, 0, 0));
+    }
+    
+    private void setBottom() {
+        HBox hbox1 = new HBox(5);
+        TextField pgCurrent = new TextField(Integer.toString(pg));
+        Button prev = new Button("<<");
+        Button next = new Button(">>");
+        
+        pgCurrent.prefWidthProperty().set(30);
+        prev.prefHeightProperty().set(20);
+        next.prefHeightProperty().set(20);
+        next.setOnAction(e->{
+            pg++;
+            pgCurrent.setText(Integer.toString(pg));
+        });
+        
+        hbox1.getChildren().addAll(prev, pgCurrent, new Label("/ 60"), next);
+        hbox1.setAlignment(Pos.CENTER);
+        borderPane.setBottom(hbox1);
     }
 }
