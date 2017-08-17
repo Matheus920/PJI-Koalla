@@ -1,5 +1,6 @@
 package app.control;
 
+import app.control.interfaces.CRUDCategoryInterface;
 import java.util.ArrayList;
 import java.util.List;
 
