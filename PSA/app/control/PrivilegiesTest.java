@@ -12,6 +12,11 @@ public class PrivilegiesTest implements PrivilegiesButtonsInterface {
         list = new ArrayList<>();
         setPrivilegeType(type);
     }
+
+    public PrivilegiesTest() {
+        list = new ArrayList<>();
+        setPrivilegeType(PrivilegeType.ADMIN);
+    }
     
     @Override
     public List<String> getButtons() {

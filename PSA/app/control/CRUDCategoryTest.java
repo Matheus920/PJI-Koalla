@@ -34,5 +34,15 @@ public class CRUDCategoryTest implements CRUDCategoryInterface{
     public void deleteCategoryById(int id) {
         list.remove(id);
     }
+
+    @Override
+    public void updateCategoryById(int id, String value) {
+        list.set(id, value);
+    }
+
+    @Override
+    public void addCategory(String value) {
+        list.add(value);
+    }
     
 }
