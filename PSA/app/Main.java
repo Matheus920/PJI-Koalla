@@ -22,9 +22,13 @@ import javafx.stage.Stage;
 public class Main extends Application{
     private static Stage primaryStage = new Stage();
     private static BorderPane root = new BorderPane();
-    private static final HeaderView header = new HeaderView("Evento", "Aqui vai a descrição do evento");
-    private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeType.ADMIN);
+    private static HeaderView header = new HeaderView("Título", "Aqui vai a descrição do título");
+    private static Scene scene = new Scene(root, 1200, 750);
+    
+    private static PrivilegiesTest test = new PrivilegiesTest();
     private static CRUDCategoryTest test1 = new CRUDCategoryTest();
+    
+    // Main(){}
     
     public static void main(String[] args) {
         launch(args);
@@ -41,15 +45,11 @@ public class Main extends Application{
     @Override
     public void start(Stage stage) {
         primaryStage = stage;
-        primaryStage.setTitle("Portal de Simpósio Acadêmico");
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("koala1.png")));
-        
-        Scene scene = new Scene(root, 1200, 750);
-        root.setTop(header.headerShow());
-        root.setLeft(new MenuView(test).menuShow());
-        root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-        
-        primaryStage.setScene(scene);
+        setup();
+        setTop();
+        setRight();
+        setLeft();
+        setBottom();
         primaryStage.show();
     }
     
@@ -61,6 +61,31 @@ public class Main extends Application{
     }
     
     public static void eventShow() {
+        header.setTitle("Evento");
+        header.setSubtitle("Veja os eventos que estão acontecendo ou que já foram encerrados");
         root.setCenter(new EventView(test1).getBorderPane());
-    } 
+    }
+    
+    private static void setTop() {
+        root.setTop(header.headerShow());
+    }
+    
+    private static void setRight() {
+        
+    }
+    
+    private static void setLeft() {
+        root.setLeft(new MenuView(test).menuShow());
+    }
+    
+    private static void setBottom(){
+        
+    }
+    
+    private static void setup() {
+        primaryStage.setTitle("Portal de Simpósio Acadêmico");
+        primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("koala1.png")));
+        root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        primaryStage.setScene(scene);
+    }
 }
