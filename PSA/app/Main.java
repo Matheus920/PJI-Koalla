@@ -1,5 +1,6 @@
 package app;
 
+import app.control.CRUDCategoryTest;
 import app.control.PrivilegeType;
 import app.control.PrivilegiesTest;
 import app.view.CategoryView;
@@ -22,6 +23,8 @@ public class Main extends Application{
     private static Stage primaryStage = new Stage();
     private static BorderPane root = new BorderPane();
     private static final HeaderView header = new HeaderView("Evento", "Aqui vai a descrição do evento");
+    private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeType.ADMIN);
+    private static CRUDCategoryTest test1 = new CRUDCategoryTest();
     
     public static void main(String[] args) {
         launch(args);
@@ -43,7 +46,6 @@ public class Main extends Application{
         
         Scene scene = new Scene(root, 1200, 750);
         root.setTop(header.headerShow());
-        PrivilegiesTest test = new PrivilegiesTest(PrivilegeType.ADMIN);
         root.setLeft(new MenuView(test).menuShow());
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         
@@ -54,11 +56,11 @@ public class Main extends Application{
     public static void categoryShow(){
         header.setTitle("Categoria");
         header.setSubtitle("Lista de categorias que englobam os eventos");
-        ListView center = new CategoryView().showCategory();
+        ListView center = new CategoryView(test1).getCategoryList();
         root.setCenter(center);
     }
     
     public static void eventShow() {
-        root.setCenter(new EventView().getBorderPane());
+        root.setCenter(new EventView(test1).getBorderPane());
     } 
 }
