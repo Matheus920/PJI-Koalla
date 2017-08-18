@@ -3,7 +3,6 @@ package app.view;
 import app.Main;
 import app.control.PrivilegeType;
 import app.control.interfaces.PrivilegiesButtonsInterface;
-import app.control.PrivilegiesTest;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Cursor;
@@ -15,6 +14,7 @@ public class MenuView {
     private final ObservableList<Button> buttons = FXCollections.observableArrayList();
     private VBox vbox = new VBox(0);
     private PrivilegiesButtonsInterface privilegies;
+    
     public MenuView(PrivilegiesButtonsInterface privilegies)
     {
         this.privilegies = privilegies;
@@ -52,54 +52,54 @@ public class MenuView {
     }
     
     private void setButtonsAdmin() {
-        buttons.get(PrivilegeType.Admin.EVENT).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Admin.EVENT).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Admin.EVENT).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Admin.EVENT).setOnAction(e->{
+        buttons.get(PrivilegeType.AdminButtons.EVENT).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.AdminButtons.EVENT).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.AdminButtons.EVENT).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.AdminButtons.EVENT).setOnAction(e->{
             Main.eventShow();
         });
         
-        buttons.get(PrivilegeType.Admin.BOARD).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Admin.BOARD).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Admin.BOARD).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Admin.BOARD).setOnAction(e->{
+        buttons.get(PrivilegeType.AdminButtons.BOARD).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.AdminButtons.BOARD).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.AdminButtons.BOARD).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.AdminButtons.BOARD).setOnAction(e->{
             // TODO: chamar tela comite academico
         });
         
-        buttons.get(PrivilegeType.Admin.CALENDAR).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Admin.CALENDAR).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Admin.CALENDAR).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Admin.CALENDAR).setOnAction(e->{
+        buttons.get(PrivilegeType.AdminButtons.CALENDAR).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.AdminButtons.CALENDAR).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.AdminButtons.CALENDAR).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.AdminButtons.CALENDAR).setOnAction(e->{
             // TODO: chamar tela calendario
         });
         
-        buttons.get(PrivilegeType.Admin.CATEGORY).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Admin.CATEGORY).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Admin.CATEGORY).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Admin.CATEGORY).setOnAction(e->{
+        buttons.get(PrivilegeType.AdminButtons.CATEGORY).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.AdminButtons.CATEGORY).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.AdminButtons.CATEGORY).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.AdminButtons.CATEGORY).setOnAction(e->{
             Main.categoryShow();
         });
         
-        buttons.get(PrivilegeType.Admin.SPEAKER).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Admin.SPEAKER).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Admin.SPEAKER).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Admin.SPEAKER).setOnAction(e->{
+        buttons.get(PrivilegeType.AdminButtons.SPEAKER).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.AdminButtons.SPEAKER).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.AdminButtons.SPEAKER).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.AdminButtons.SPEAKER).setOnAction(e->{
             // TODO: chamar tela palestrante
         });
     }
     
     private void setButtonsNotLogged() {
-        buttons.get(PrivilegeType.User.EVENT).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.User.EVENT).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.User.EVENT).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.User.EVENT).setOnAction(e->{
+        buttons.get(PrivilegeType.UserButtons.EVENT).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.UserButtons.EVENT).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.UserButtons.EVENT).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.UserButtons.EVENT).setOnAction(e->{
             Main.eventShow();
         });
         
-        buttons.get(PrivilegeType.User.CALENDAR).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.User.CALENDAR).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.User.CALENDAR).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.User.CALENDAR).setOnAction(e->{
+        buttons.get(PrivilegeType.UserButtons.CALENDAR).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.UserButtons.CALENDAR).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.UserButtons.CALENDAR).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.UserButtons.CALENDAR).setOnAction(e->{
             // TODO: chamar tela calendario
         });
     }
@@ -109,47 +109,47 @@ public class MenuView {
     }
     
     private void setButtonsEvaluator() {
-        buttons.get(PrivilegeType.Evaluator.EVENT).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Evaluator.EVENT).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Evaluator.EVENT).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Evaluator.EVENT).setOnAction(e->{
+        buttons.get(PrivilegeType.EvaluatorButtons.EVENT).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.EvaluatorButtons.EVENT).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.EvaluatorButtons.EVENT).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.EvaluatorButtons.EVENT).setOnAction(e->{
             Main.eventShow();
         });
         
-        buttons.get(PrivilegeType.Evaluator.EVALUATION).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Evaluator.EVALUATION).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Evaluator.EVALUATION).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Evaluator.EVALUATION).setOnAction(e->{
+        buttons.get(PrivilegeType.EvaluatorButtons.EVALUATION).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.EvaluatorButtons.EVALUATION).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.EvaluatorButtons.EVALUATION).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.EvaluatorButtons.EVALUATION).setOnAction(e->{
             // TODO: chamar tela comite academico
         });
         
-        buttons.get(PrivilegeType.Evaluator.CALENDAR).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Evaluator.CALENDAR).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Evaluator.CALENDAR).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Evaluator.CALENDAR).setOnAction(e->{
+        buttons.get(PrivilegeType.EvaluatorButtons.CALENDAR).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.EvaluatorButtons.CALENDAR).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.EvaluatorButtons.CALENDAR).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.EvaluatorButtons.CALENDAR).setOnAction(e->{
             // TODO: chamar tela calendario
         });
     }
     
     private void setButtonsBoard() {
-        buttons.get(PrivilegeType.Board.EVENT).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Board.EVENT).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Board.EVENT).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Board.EVENT).setOnAction(e->{
+        buttons.get(PrivilegeType.BoardButtons.EVENT).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.BoardButtons.EVENT).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.BoardButtons.EVENT).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.BoardButtons.EVENT).setOnAction(e->{
             // TODO: chamar tela calendario
         });
         
-        buttons.get(PrivilegeType.Board.CALENDAR).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Board.CALENDAR).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Board.CALENDAR).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Board.CALENDAR).setOnAction(e->{
+        buttons.get(PrivilegeType.BoardButtons.CALENDAR).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.BoardButtons.CALENDAR).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.BoardButtons.CALENDAR).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.BoardButtons.CALENDAR).setOnAction(e->{
             // TODO: chamar tela calendario
         });
         
-        buttons.get(PrivilegeType.Board.EVALUATORS).setFont(Font.font("Segoe UI", 15));
-        buttons.get(PrivilegeType.Board.EVALUATORS).setPrefSize(100, 70);
-        buttons.get(PrivilegeType.Board.EVALUATORS).setCursor(Cursor.HAND);
-        buttons.get(PrivilegeType.Board.EVALUATORS).setOnAction(e->{
+        buttons.get(PrivilegeType.BoardButtons.EVALUATORS).setFont(Font.font("Segoe UI", 15));
+        buttons.get(PrivilegeType.BoardButtons.EVALUATORS).setPrefSize(100, 70);
+        buttons.get(PrivilegeType.BoardButtons.EVALUATORS).setCursor(Cursor.HAND);
+        buttons.get(PrivilegeType.BoardButtons.EVALUATORS).setOnAction(e->{
             // TODO: chamar tela calendario
         });
         

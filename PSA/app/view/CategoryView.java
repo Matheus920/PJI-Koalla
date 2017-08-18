@@ -1,6 +1,5 @@
 package app.view;
 
-import app.control.CRUDCategoryTest;
 import java.util.List;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -28,14 +27,19 @@ import app.control.interfaces.CRUDCategoryInterface;
 public class CategoryView {
     private final ObservableList<AnchorPane> items  = FXCollections.observableArrayList();
     private final ListView<AnchorPane> list = new ListView(items);
+    private final CRUDCategoryInterface categories;
     
-    public ListView showCategory(){
-        setItems(new CRUDCategoryTest());
+    public CategoryView(CRUDCategoryInterface categories) {
+        this.categories = categories;
+    }
+    
+    public ListView getCategoryList(){
+        setItems();
         setLists();
         return list;
     }
     
-    private  void setItems(CRUDCategoryInterface categories){
+    private  void setItems(){
         setContent(categories.getAllCategories());
     }
     
@@ -149,15 +153,7 @@ public class CategoryView {
        if(alert.getResult() == ButtonType.YES){
            int index = list.getSelectionModel().getSelectedIndex();
            list.getItems().remove(index);
+           categories.deleteCategoryById(index);
        }
-   }
-   
-   public ObservableList<String> getDataCategory() {
-       ObservableList<String> itemsName = FXCollections.observableArrayList();
-       setItems(new CRUDCategoryTest());
-       items.forEach((a) -> {
-           itemsName.add(((Text)a.getChildren().get(0)).getText());
-        });
-    return itemsName;
    }
 }

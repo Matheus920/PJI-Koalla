@@ -1,5 +1,6 @@
 package app.view;
 
+import app.control.interfaces.CRUDCategoryInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -32,7 +33,7 @@ public class EventView {
     private final Label lblCategory = new Label("Categoria: ");
     private final Label lblDate = new Label("Data: ");
     private final TextField tfSearch = new TextField();
-    private final ObservableList<String> dataCategory = FXCollections.observableArrayList(new CategoryView().getDataCategory());
+    private final ObservableList<String> dataCategory = FXCollections.observableArrayList();
     private final ComboBox cbCategory = new ComboBox(dataCategory);
     private final DatePicker dpDate = new DatePicker(); 
     private final RadioButton rbOpened = new RadioButton("Abertos");
@@ -42,8 +43,11 @@ public class EventView {
     private final VBox vbox = new VBox(2);
     private final HBox hbox = new HBox(2);
     private int pg = 1;
-    public EventView() {
-        
+    
+    private CRUDCategoryInterface categories;
+    
+    public EventView(CRUDCategoryInterface categories) {
+        this.categories = categories;
         setPositions();
         setLabels();
         setFields();
@@ -78,6 +82,7 @@ public class EventView {
     }
     
     private void setComboBoxes() {
+        dataCategory.addAll(categories.getAllCategories());
         dataCategory.add("");
     }
     
@@ -181,11 +186,20 @@ public class EventView {
         prev.prefHeightProperty().set(20);
         next.prefHeightProperty().set(20);
         next.setOnAction(e->{
-            pg++;
-            pgCurrent.setText(Integer.toString(pg));
+            if(pg < 10) {
+                pg++;
+                pgCurrent.setText(Integer.toString(pg));
+            }
         });
         
-        hbox1.getChildren().addAll(prev, pgCurrent, new Label("/ 60"), next);
+        prev.setOnAction(e->{
+            if(pg > 1) {
+                pg--;
+                pgCurrent.setText(Integer.toString(pg));
+            }
+        });
+        
+        hbox1.getChildren().addAll(prev, pgCurrent, new Label("/ 10"), next);
         hbox1.setAlignment(Pos.CENTER);
         borderPane.setBottom(hbox1);
     }
