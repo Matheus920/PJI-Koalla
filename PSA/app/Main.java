@@ -1,6 +1,7 @@
 package app;
 
 import app.control.CRUDCategoryTest;
+import app.control.CRUDListSymposiumsTest;
 import app.control.PrivilegeType;
 import app.control.PrivilegiesTest;
 import app.view.CategoryView;
@@ -22,13 +23,12 @@ import javafx.stage.Stage;
 public class Main extends Application{
     private static Stage primaryStage = new Stage();
     private static BorderPane root = new BorderPane();
-    private static HeaderView header = new HeaderView("Título", "Aqui vai a descrição do título");
+    private static HeaderView header;
     private static Scene scene = new Scene(root, 1200, 750);
     
-    private static PrivilegiesTest test = new PrivilegiesTest();
+    private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeType.BOARD);
     private static CRUDCategoryTest test1 = new CRUDCategoryTest();
-    
-    // Main(){}
+    private static CRUDListSymposiumsTest test2 = new CRUDListSymposiumsTest();
     
     public static void main(String[] args) {
         launch(args);
@@ -54,19 +54,24 @@ public class Main extends Application{
     }
     
     public static void categoryShow(){
-        header.setTitle("Categoria");
-        header.setSubtitle("Lista de categorias que englobam os eventos");
-        ListView center = new CategoryView(test1).getCategoryList();
+        CategoryView category = new CategoryView(test1);
+        header.setTitle(category);
+        ListView center = category.getCategoryList();
         root.setCenter(center);
     }
     
     public static void eventShow() {
         header.setTitle("Evento");
         header.setSubtitle("Veja os eventos que estão acontecendo ou que já foram encerrados");
-        root.setCenter(new EventView(test1).getBorderPane());
+        root.setCenter(new EventView(test1, test2, test).getBorderPane());
+    }
+    
+    public static void symposiumShow() {
+        
     }
     
     private static void setTop() {
+        header = new HeaderView(test);
         root.setTop(header.headerShow());
     }
     
