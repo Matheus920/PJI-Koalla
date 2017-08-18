@@ -43,6 +43,31 @@ public class CategoryView {
         setContent(categories.getAllCategories());
     }
     
+    
+    private void setContent(String... content) {
+        for(String a : content) {
+            AnchorPane anchorPane = new AnchorPane();
+            Text text = new Text(a);
+            Button btn = new Button("X");
+            btn.setMinSize(5, 3);
+            btn.setFont(Font.font("Segoe UI", 10));
+            btn.setVisible(false);
+            btn.setCursor(Cursor.HAND);
+            
+            btn.setOnAction(e -> {
+                showDeleteDialog();
+            });
+                
+            
+            anchorPane.getChildren().addAll(text, btn);
+            AnchorPane.setRightAnchor(btn, 5.0);
+            AnchorPane.setTopAnchor(btn, 2.0);
+            AnchorPane.setBottomAnchor(text, 3.0);
+            
+            items.add(anchorPane);
+        }
+    }
+    
     private void setContent(List<String> content) {
         for(String a : content) {
             AnchorPane anchorPane = new AnchorPane();
@@ -84,13 +109,13 @@ public class CategoryView {
         list.setOnMouseClicked(e -> {
             if(e.getClickCount() == 2){
                System.out.println(list.getSelectionModel().getSelectedIndex());
-               showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText());
+               showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
             }
         }); 
         
         list.setCursor(Cursor.HAND);
     }
-   private void showEditDialog(String editText){
+   private void showEditDialog(String editText, int index){
       
        Stage stage = new Stage();
        
@@ -107,9 +132,23 @@ public class CategoryView {
        Button buttonOk = new Button("OK");
        Button buttonCancel = new Button("Cancelar");
        
+       buttonOk.setCursor(Cursor.HAND);
+       buttonCancel.setCursor(Cursor.HAND);
        
        buttonOk.setFont(Font.font("Segoe UI", 18));
        buttonCancel.setFont(Font.font("Segoe UI", 18));
+       
+       buttonOk.setOnAction(e->{
+           categories.updateCategoryById(index, textField.getText());
+           ((Text)items.get(index).getChildren().get(0)).setText(textField.getText());
+           stage.close();
+       });
+       
+       textField.setOnAction(e->{
+            categories.updateCategoryById(index, textField.getText());
+           ((Text)items.get(index).getChildren().get(0)).setText(textField.getText());
+           stage.close();
+       });
        
        buttonCancel.setOnAction(e -> {
            stage.close();
@@ -156,4 +195,64 @@ public class CategoryView {
            categories.deleteCategoryById(index);
        }
    }
+
+    void showAddDialog() {
+        Stage stage = new Stage();
+       
+       stage.setTitle("Adicionar");
+       stage.getIcons().add(new Image(getClass().getResourceAsStream("koala1.png")));
+       
+       GridPane gridPane = new GridPane();
+       Label label = new Label("Categoria:");
+       TextField textField = new TextField();
+       
+       label.setFont(Font.font("Segoe UI", 18));
+       textField.setFont(Font.font("Segoe UI", 18));
+       
+       Button buttonOk = new Button("OK");
+       Button buttonCancel = new Button("Cancelar");
+       
+       buttonOk.setCursor(Cursor.HAND);
+       buttonCancel.setCursor(Cursor.HAND);
+       
+       buttonOk.setFont(Font.font("Segoe UI", 18));
+       buttonCancel.setFont(Font.font("Segoe UI", 18));
+       
+       buttonOk.setOnAction(e->{
+           categories.addCategory(textField.getText());
+           setContent(textField.getText());
+           stage.close();
+       });
+       
+       textField.setOnAction(e->{
+           categories.addCategory(textField.getText());
+           setContent(textField.getText());
+           stage.close();
+       });
+       
+       buttonCancel.setOnAction(e -> {
+           stage.close();
+       });
+       
+       gridPane.setAlignment(Pos.CENTER);
+       HBox hbox = new HBox(buttonOk, buttonCancel);
+       
+       hbox.setSpacing(5);
+       
+       gridPane.add(label, 0, 0);
+       gridPane.add(textField, 1, 0);
+       
+       gridPane.setHgap(10);
+       gridPane.setVgap(20);
+       
+       gridPane.add(hbox, 1, 1);
+       
+       hbox.setAlignment(Pos.BASELINE_RIGHT);
+       
+       Scene scene = new Scene(gridPane, 400, 200);
+       
+       stage.initModality(Modality.APPLICATION_MODAL);
+       stage.setScene(scene);
+       stage.showAndWait();
+    }
 }

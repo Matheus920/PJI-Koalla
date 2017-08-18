@@ -15,8 +15,7 @@ public class MenuView {
     private VBox vbox = new VBox(0);
     private PrivilegiesButtonsInterface privilegies;
     
-    public MenuView(PrivilegiesButtonsInterface privilegies)
-    {
+    public MenuView(PrivilegiesButtonsInterface privilegies) {
         this.privilegies = privilegies;
         setButtons();
         vbox.getChildren().addAll(buttons);
@@ -120,7 +119,7 @@ public class MenuView {
         buttons.get(PrivilegeType.EvaluatorButtons.EVALUATION).setPrefSize(100, 70);
         buttons.get(PrivilegeType.EvaluatorButtons.EVALUATION).setCursor(Cursor.HAND);
         buttons.get(PrivilegeType.EvaluatorButtons.EVALUATION).setOnAction(e->{
-            // TODO: chamar tela comite academico
+            // TODO: chamar tela comite avaliação
         });
         
         buttons.get(PrivilegeType.EvaluatorButtons.CALENDAR).setFont(Font.font("Segoe UI", 15));
@@ -136,7 +135,7 @@ public class MenuView {
         buttons.get(PrivilegeType.BoardButtons.EVENT).setPrefSize(100, 70);
         buttons.get(PrivilegeType.BoardButtons.EVENT).setCursor(Cursor.HAND);
         buttons.get(PrivilegeType.BoardButtons.EVENT).setOnAction(e->{
-            // TODO: chamar tela calendario
+            Main.eventShow();
         });
         
         buttons.get(PrivilegeType.BoardButtons.CALENDAR).setFont(Font.font("Segoe UI", 15));
@@ -150,7 +149,7 @@ public class MenuView {
         buttons.get(PrivilegeType.BoardButtons.EVALUATORS).setPrefSize(100, 70);
         buttons.get(PrivilegeType.BoardButtons.EVALUATORS).setCursor(Cursor.HAND);
         buttons.get(PrivilegeType.BoardButtons.EVALUATORS).setOnAction(e->{
-            // TODO: chamar tela calendario
+            // TODO: chamar tela avaliadores
         });
         
         

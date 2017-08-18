@@ -1,6 +1,8 @@
 package app.view;
 
+import app.control.PrivilegeType;
 import app.control.interfaces.CRUDCategoryInterface;
+import app.control.interfaces.PrivilegeTypeInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -27,6 +29,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import app.control.interfaces.CRUDListSymposiumsInterface;
 
 public class EventView {
     private final Label lblSearch = new Label("Procurar: ");
@@ -41,13 +44,22 @@ public class EventView {
     private final BorderPane borderPane = new BorderPane();
     private final Button btnConfirm = new Button("Pesquisar");
     private final VBox vbox = new VBox(2);
+    private final VBox vbox1 = new VBox(10);
     private final HBox hbox = new HBox(2);
+    private final TextField pgCurrent = new TextField();
+    private final Button prev = new Button("<<");
+    private final Button next = new Button(">>");
+    
     private int pg = 1;
     
     private CRUDCategoryInterface categories;
+    private CRUDListSymposiumsInterface symposiums;
+    private PrivilegeTypeInterface privilege;
     
-    public EventView(CRUDCategoryInterface categories) {
+    public EventView(CRUDCategoryInterface categories, CRUDListSymposiumsInterface symposiums, PrivilegeTypeInterface privilege) {
         this.categories = categories;
+        this.symposiums = symposiums;
+        this.privilege = privilege;
         setPositions();
         setLabels();
         setFields();
@@ -123,49 +135,21 @@ public class EventView {
         hbox.setBorder(new Border(new BorderStroke(Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, 
                 BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE,
                 CornerRadii.EMPTY, new BorderWidths(1), Insets.EMPTY)));
-    }
-    
-    private StackPane getStackPane() {
         
-        StackPane stackPane = new StackPane();
-        Label txtTitulo = new Label("Dia especial das Abelhas");
-        Label txtTeste = new Label("Descrição: Hoje podemos analisar uma grande e bela abelha");
-        HBox hbox = new HBox();
-        VBox vbox = new VBox(5);
-        
-        txtTitulo.setCursor(Cursor.HAND);
-        txtTitulo.setOnMouseClicked(e -> {
-            // TODO: chamar tela de simposio
-            System.out.println("Simpósio");
-        });
-        
-        txtTitulo.setFont(Font.font("Segoe UI", 20));
-        txtTeste.setFont(Font.font("Segoe UI", 15));
-        
-        hbox.getChildren().add(txtTeste);
-        vbox.getChildren().addAll(txtTitulo, hbox);
-        
-        hbox.setAlignment(Pos.CENTER_LEFT);
-        vbox.setAlignment(Pos.CENTER);
-        VBox.setMargin(hbox, new Insets(0, 0, 0, 10));
-        stackPane.getChildren().add(vbox);
-        
-        stackPane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, 
-                BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE,
-                CornerRadii.EMPTY, new BorderWidths(1), Insets.EMPTY)));
-        
-        stackPane.setPadding(new Insets(10, 0, 0, 0));
-        stackPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-        
-        return stackPane;
+        if(privilege.getPrivilegeType() == PrivilegeType.BOARD) {
+            Button btnNew = new Button("Novo...");
+            btnNew.setFont(Font.font("Segoe UI", 15));
+            btnNew.setCursor(Cursor.HAND);
+            hbox.getChildren().add(btnNew);
+            HBox.setMargin(btnNew, new Insets(15, 0, 0, 10));
+        }
     }
     
     private void setCenter() {
         ScrollPane scrollPane = new ScrollPane();
-        VBox vbox1 = new VBox(10);
         vbox1.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-        for(int i = 0; i < 40; i++)
-            vbox1.getChildren().add(getStackPane());
+        
+        setPage();
         
         scrollPane.setContent(vbox1);
         
@@ -176,18 +160,103 @@ public class EventView {
         BorderPane.setMargin(vbox1, new Insets(10, 0, 0, 0));
     }
     
+    private void setPage() {
+        vbox1.getChildren().clear();
+        for(String[] a : symposiums.listSymposium(pg)){
+            StackPane stackPane = new StackPane();
+            Label txtTitulo = new Label(a[0]);
+            Label txtTeste = new Label(a[1]);
+            HBox hbox = new HBox();
+            VBox vbox = new VBox();
+            
+            vbox.getChildren().add(txtTitulo);
+            
+            if(privilege.getPrivilegeType() == PrivilegeType.BOARD) {
+                HBox hbox1 = new HBox(10);
+                Button edit = new Button("Editar");
+                Button del = new Button("X");
+
+                edit.setCursor(Cursor.HAND);
+                del.setCursor(Cursor.HAND);
+
+                hbox1.getChildren().addAll(edit, del);
+                hbox1.setVisible(false);
+
+                stackPane.setOnMouseEntered(e -> {
+                    hbox1.setVisible(true);
+                });
+
+                stackPane.setOnMouseExited(e -> {
+                  hbox1.setVisible(false);
+                });
+                  
+                hbox1.setAlignment(Pos.CENTER_RIGHT);
+                vbox.getChildren().add(hbox1);
+            }
+
+            txtTitulo.setCursor(Cursor.HAND);
+            txtTitulo.setOnMouseClicked(e -> {
+                // TODO: chamar tela de simposio
+                System.out.println("Simpósio");
+            });
+
+            txtTitulo.setFont(Font.font("Segoe UI", 20));
+            txtTeste.setFont(Font.font("Segoe UI", 15));
+
+            hbox.getChildren().add(txtTeste);
+            vbox.getChildren().add(hbox);
+
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            vbox.setAlignment(Pos.CENTER);
+            VBox.setMargin(hbox, new Insets(0, 0, 0, 10));
+            stackPane.getChildren().add(vbox);
+
+            stackPane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, 
+                    BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE,
+                    CornerRadii.EMPTY, new BorderWidths(1), Insets.EMPTY)));
+
+            stackPane.setPadding(new Insets(10, 0, 0, 0));
+            stackPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+            
+          
+            
+            vbox1.getChildren().add(stackPane);
+        }
+            
+    }
+    
+    private boolean isNumeric(String str){
+        for(char a: str.toCharArray()) {
+            if(!Character.isDigit(a)) return false;
+        }
+        return true;
+    }
+    
     private void setBottom() {
         HBox hbox1 = new HBox(5);
-        TextField pgCurrent = new TextField(Integer.toString(pg));
-        Button prev = new Button("<<");
-        Button next = new Button(">>");
-        
+        pgCurrent.setText(Integer.toString(pg));
         pgCurrent.prefWidthProperty().set(30);
         prev.prefHeightProperty().set(20);
         next.prefHeightProperty().set(20);
+        
+        pgCurrent.setOnAction(e->{
+            if(isNumeric(pgCurrent.getText())) {
+                int temp = Integer.parseInt(pgCurrent.getText());
+                if(temp > 0 && temp <= symposiums.numberPages()) {
+                    pg = temp;
+                    setPage();
+                } else {
+                    pgCurrent.setText(Integer.toString(pg));
+                }
+            } else {
+                pgCurrent.setText(Integer.toString(pg));
+            }
+        });
+        
         next.setOnAction(e->{
-            if(pg < 10) {
+            if(pg < symposiums.numberPages()) {
                 pg++;
+                setPage();
                 pgCurrent.setText(Integer.toString(pg));
             }
         });
@@ -195,11 +264,12 @@ public class EventView {
         prev.setOnAction(e->{
             if(pg > 1) {
                 pg--;
+                setPage();
                 pgCurrent.setText(Integer.toString(pg));
             }
         });
         
-        hbox1.getChildren().addAll(prev, pgCurrent, new Label("/ 10"), next);
+        hbox1.getChildren().addAll(prev, pgCurrent, new Label("/ " + symposiums.numberPages()), next);
         hbox1.setAlignment(Pos.CENTER);
         borderPane.setBottom(hbox1);
     }
