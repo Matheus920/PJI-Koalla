@@ -8,7 +8,7 @@ public class PrivilegeType {
     public static final int NOTLOGGED = 3;
     public static final int BOARD = 4;
     
-    public static class Admin{
+    public static class AdminButtons{
         public static final int EVENT = 0;
         public static final int CALENDAR = 1;
         public static final int BOARD = 2;
@@ -16,23 +16,23 @@ public class PrivilegeType {
         public static final int CATEGORY = 4;
     }
     
-    public static class User{
+    public static class UserButtons{
         public static final int EVENT = 0;
         public static final int CALENDAR = 1;
     }
     
-    public static class Evaluator{
+    public static class EvaluatorButtons{
         public static final int EVENT = 0;
         public static final int CALENDAR = 1;
         public static final int EVALUATION = 2;  
     }
     
-    public static class notLogged{
+    public static class notLoggedButtons{
         public static final int EVENT = 0;
         public static final int CALENDAR = 1;
     }
     
-    public static class Board{
+    public static class BoardButtons{
         public static final int EVENT = 0;
         public static final int CALENDAR = 1;
         public static final int EVALUATORS = 2;
