@@ -9,8 +9,8 @@ public class CRUDCategoryTest implements CRUDCategoryInterface{
     
     public CRUDCategoryTest() {
         list = new ArrayList<>();
-        setList("Thomas", "Turbando", "Oscar", "Alho", "Isadora", "Pinto", "Jacinto", "Leitte", "Aquino", "Rego", "Paula", "Tejando", "Ana", "Konda", "Cuca", "Beludo",
-        "Diva", "Aginaberta", "Tati", "Komenno", "Rafaela");
+        setList("Artes", "Biologia", "Mecânica", "Informática", "Medicina", "Eletrônica", "Enfermagem", "Sociologia", "Economia", "Política", "Engenharia", "Arquitetura", "Redes", "Comunicação", "Ecologia", "Agricultura",
+        "Mobilidade", "Teologia", "Turismo", "Filosofia", "Química");
     }
     
     private void setList(String... args)
