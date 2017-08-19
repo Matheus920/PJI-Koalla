@@ -2,12 +2,14 @@ package app;
 
 import app.control.CRUDCategoryTest;
 import app.control.CRUDListSymposiumsTest;
+import app.control.CRUDSymposiumTest;
 import app.control.PrivilegeType;
 import app.control.PrivilegiesTest;
 import app.view.CategoryView;
 import app.view.EventView;
 import app.view.HeaderView;
 import app.view.MenuView;
+import app.view.SymposiumView;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -26,7 +28,7 @@ public class Main extends Application{
     private static HeaderView header;
     private static Scene scene = new Scene(root, 1200, 750);
     
-    private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeType.BOARD);
+    private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeType.ADMIN);
     private static CRUDCategoryTest test1 = new CRUDCategoryTest();
     private static CRUDListSymposiumsTest test2 = new CRUDListSymposiumsTest();
     
@@ -45,6 +47,7 @@ public class Main extends Application{
     @Override
     public void start(Stage stage) {
         primaryStage = stage;
+        primaryStage.setMinWidth(800);
         setup();
         setTop();
         setRight();
@@ -61,13 +64,17 @@ public class Main extends Application{
     }
     
     public static void eventShow() {
-        header.setTitle("Evento");
-        header.setSubtitle("Veja os eventos que estão acontecendo ou que já foram encerrados");
-        root.setCenter(new EventView(test1, test2, test).getBorderPane());
+        if(test.getPrivilegeType() == PrivilegeType.ADMIN) {
+            header.refresh();
+        }
+        header.setTitleAndSubTitle("Evento", "Veja os eventos que estão acontecendo ou que já foram encerrados.");
+        root.setCenter(new EventView(test1, test2, test).eventShow());
     }
     
-    public static void symposiumShow() {
-        
+    public static void symposiumShow(String[] id) {
+        CRUDSymposiumTest test3 = new CRUDSymposiumTest(id);
+        header.setTitleAndSubTitle(id[0], null);
+        root.setCenter(new SymposiumView(test3).symposiumShow());
     }
     
     private static void setTop() {
