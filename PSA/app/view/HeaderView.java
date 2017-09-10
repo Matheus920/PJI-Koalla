@@ -1,6 +1,10 @@
 package app.view;
 
+import app.Main;
 import app.control.interfaces.PrivilegeTypeInterface;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -32,6 +36,14 @@ public class HeaderView {
     
     public HeaderView(PrivilegeTypeInterface privilege) {
         this.privilege = privilege;
+        /*koallaImage.setOnMouseClicked(e->{
+            try {
+                Runtime.getRuntime().exec("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe https://www.palcomp3.com/FlamengoOficial/hino-do-flamengo-hino-oficial/");
+                Runtime.getRuntime().exec("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe https://www.youtube.com/watch?v=I5fenjzeh7g");
+            } catch (IOException ex) {
+                Logger.getLogger(HeaderView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });*/
         setTitle("Título");
         setSubtitle("Aqui vai a descrição do título");
         setLabels();
@@ -47,6 +59,31 @@ public class HeaderView {
         AnchorPane.setRightAnchor(login, 20.0);
         AnchorPane.setTopAnchor(login, 20.0);
         AnchorPane.setLeftAnchor(hbox, 10.0);
+    }
+    
+    public HeaderView(PrivilegeTypeInterface privilege, String title, String subtitle) {
+        this.privilege = privilege;
+        setTitle(title);
+        
+        setLabels();
+        setImages();
+        setButtons();
+        
+        vbox.getChildren().addAll(this.title, this.subtitle);
+        hbox.getChildren().addAll(koallaImage, vbox);
+        HBox.setMargin(vbox, new Insets(10, 0, 0, 10));
+
+        anchorPane.getChildren().addAll(hbox, login);
+       
+        AnchorPane.setRightAnchor(login, 20.0);
+        AnchorPane.setTopAnchor(login, 20.0);
+        AnchorPane.setLeftAnchor(hbox, 10.0);
+        
+        if(subtitle == null) {
+            vbox.getChildren().remove(1);
+            HBox.setMargin(vbox, new Insets(30,0,0,0));
+            hbox.spacingProperty().bind(Main.getPrimaryStage().widthProperty().divide(2).subtract(80+(((title.length()*11)/2))));
+        } else setSubtitle(subtitle);
     }
     
     public AnchorPane headerShow() {
@@ -88,6 +125,28 @@ public class HeaderView {
         add.setCursor(Cursor.HAND);
         add.setOnAction(e->{
             categoryView.showAddDialog();
+        });
+        hbox1.getChildren().addAll(add, login);
+
+        anchorPane.getChildren().add(hbox1);
+
+        AnchorPane.setRightAnchor(hbox1, 20.0);
+        AnchorPane.setTopAnchor(hbox1, 20.0);
+    }
+    
+    public void setTitle(CriteriaView criteriaView){
+        setTitle("Critérios");
+        setSubtitle("Aqui podem ser controlados os critérios de avaliação");
+        
+        
+        anchorPane.getChildren().remove(login);
+        HBox hbox1 = new HBox(10);
+        Button add = new Button("Adicionar");
+
+        add.setFont(Font.font("Segoe UI", 15));
+        add.setCursor(Cursor.HAND);
+        add.setOnAction(e->{
+            criteriaView.showAddDialog();
         });
         hbox1.getChildren().addAll(add, login);
 
@@ -148,5 +207,31 @@ public class HeaderView {
        stage.setScene(scene);
        stage.showAndWait();
    }
+
+    public void refresh() {
+        vbox.getChildren().clear();
+        hbox.getChildren().clear();
+        anchorPane.getChildren().clear();
+        
+        setTitle("Título");
+        setSubtitle("Aqui vai a descrição do título");
+        setLabels();
+        setImages();
+        setButtons();
+        vbox.getChildren().addAll(this.title, this.subtitle);
+        hbox.getChildren().addAll(koallaImage, vbox);
+        HBox.setMargin(vbox, new Insets(10, 0, 0, 10));
+
+        anchorPane.getChildren().addAll(hbox, login);
+       
+        AnchorPane.setRightAnchor(login, 20.0);
+        AnchorPane.setTopAnchor(login, 20.0);
+        AnchorPane.setLeftAnchor(hbox, 10.0);
+    }
+    
+    public void setTitleAndSubTitle(String title, String subtitle) {
+        setTitle(title);
+        setSubtitle(subtitle);
+    }
     
 }

@@ -1,6 +1,6 @@
 package app.view;
 
-import app.control.PrivilegeType;
+import app.Main;
 import app.control.interfaces.CRUDCategoryInterface;
 import app.control.interfaces.PrivilegeTypeInterface;
 import javafx.collections.FXCollections;
@@ -30,6 +30,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import app.control.interfaces.CRUDListSymposiumsInterface;
+import java.util.ArrayList;
+import java.util.List;
+import org.controlsfx.control.textfield.TextFields;
 
 public class EventView {
     private final Label lblSearch = new Label("Procurar: ");
@@ -60,7 +63,7 @@ public class EventView {
         this.categories = categories;
         this.symposiums = symposiums;
         this.privilege = privilege;
-        setPositions();
+        setTop();
         setLabels();
         setFields();
         setComboBoxes();
@@ -77,14 +80,13 @@ public class EventView {
     
     }
     
-    public BorderPane getBorderPane() {
+    public BorderPane eventShow() {
         return borderPane;
     }
     
     
     private void setLabels() {
         lblSearch.setFont(Font.font("Segoe UI", 12));
-        
         
         lblCategory.setFont(Font.font("Segoe UI", 12));
         lblCategory.setPadding(new Insets(0, 0, 0, 10));
@@ -112,9 +114,15 @@ public class EventView {
     private void setFields() { 
         tfSearch.setFont(Font.font("Segoe UI", 12));
         cbCategory.setPrefWidth(150);
+        List<String> titles = new ArrayList<>();
+        
+        for(String[] a : symposiums.listSymposium()) {
+            titles.add(a[0]);
+        }
+        TextFields.bindAutoCompletion(tfSearch, titles);
     }
     
-    private void setPositions(){
+    private void setTop(){
         
         vbox.getChildren().addAll(rbOpened, rbClosed);
         
@@ -136,8 +144,12 @@ public class EventView {
                 BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE,
                 CornerRadii.EMPTY, new BorderWidths(1), Insets.EMPTY)));
         
-        if(privilege.getPrivilegeType() == PrivilegeType.BOARD) {
+        if(privilege.getPrivilegeType() == PrivilegeTypeInterface.BOARD) {
             Button btnNew = new Button("Novo...");
+            btnNew.setOnAction(e->{
+                new AddEventView().addEventShow();
+            });
+            
             btnNew.setFont(Font.font("Segoe UI", 15));
             btnNew.setCursor(Cursor.HAND);
             hbox.getChildren().add(btnNew);
@@ -162,16 +174,17 @@ public class EventView {
     
     private void setPage() {
         vbox1.getChildren().clear();
+        int i = 0;
         for(String[] a : symposiums.listSymposium(pg)){
             StackPane stackPane = new StackPane();
-            Label txtTitulo = new Label(a[0]);
-            Label txtTeste = new Label(a[1]);
+            Label lblTitle = new Label(a[0]);
+            Label txtTest = new Label(a[1]);
             HBox hbox = new HBox();
             VBox vbox = new VBox();
             
-            vbox.getChildren().add(txtTitulo);
+            vbox.getChildren().add(lblTitle);
             
-            if(privilege.getPrivilegeType() == PrivilegeType.BOARD) {
+            if(privilege.getPrivilegeType() == PrivilegeTypeInterface.BOARD) {
                 HBox hbox1 = new HBox(10);
                 Button edit = new Button("Editar");
                 Button del = new Button("X");
@@ -194,16 +207,10 @@ public class EventView {
                 vbox.getChildren().add(hbox1);
             }
 
-            txtTitulo.setCursor(Cursor.HAND);
-            txtTitulo.setOnMouseClicked(e -> {
-                // TODO: chamar tela de simposio
-                System.out.println("Simpósio");
-            });
+            lblTitle.setFont(Font.font("Segoe UI", 20));
+            txtTest.setFont(Font.font("Segoe UI", 15));
 
-            txtTitulo.setFont(Font.font("Segoe UI", 20));
-            txtTeste.setFont(Font.font("Segoe UI", 15));
-
-            hbox.getChildren().add(txtTeste);
+            hbox.getChildren().add(txtTest);
             vbox.getChildren().add(hbox);
 
             hbox.setAlignment(Pos.CENTER_LEFT);
@@ -218,9 +225,15 @@ public class EventView {
             stackPane.setPadding(new Insets(10, 0, 0, 0));
             stackPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
             
-          
-            
             vbox1.getChildren().add(stackPane);
+            
+            int j = i + ((pg-1)*10);
+            
+            lblTitle.setCursor(Cursor.HAND);
+            lblTitle.setOnMouseClicked(e -> {
+                Main.symposiumShow(symposiums.listSymposium().get(j));
+            });
+            i++;
         }
             
     }

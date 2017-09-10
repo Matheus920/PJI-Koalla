@@ -19,6 +19,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.validation.Severity;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
 
 public class LoginView {
     private final Label lblUser = new Label("Usuário:");
@@ -57,7 +60,6 @@ public class LoginView {
         
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
-        
     }
     
     private void setLabels() {

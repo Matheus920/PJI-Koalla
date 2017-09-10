@@ -1,5 +1,6 @@
 package app.view;
 
+import app.Main;
 import java.util.List;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,6 +24,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import app.control.interfaces.CRUDCategoryInterface;
+import javafx.scene.input.KeyCode;
 
 public class CategoryView {
     private final ObservableList<AnchorPane> items  = FXCollections.observableArrayList();
@@ -108,10 +110,15 @@ public class CategoryView {
         
         list.setOnMouseClicked(e -> {
             if(e.getClickCount() == 2){
-               System.out.println(list.getSelectionModel().getSelectedIndex());
                showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
             }
-        }); 
+        });
+        
+        list.setOnKeyPressed(e->{
+            if(e.getCode() == KeyCode.ENTER) {
+               showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
+            }
+        });
         
         list.setCursor(Cursor.HAND);
     }
@@ -246,6 +253,7 @@ public class CategoryView {
        gridPane.setVgap(20);
        
        gridPane.add(hbox, 1, 1);
+       Main.setBackgroundWhite(gridPane);
        
        hbox.setAlignment(Pos.BASELINE_RIGHT);
        

@@ -1,5 +1,6 @@
 package app.control;
 
+import app.control.interfaces.PrivilegeTypeInterface;
 import app.control.interfaces.PrivilegiesButtonsInterface;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class PrivilegiesTest implements PrivilegiesButtonsInterface {
 
     public PrivilegiesTest() {
         list = new ArrayList<>();
-        setPrivilegeType(PrivilegeType.ADMIN);
+        setPrivilegeType(PrivilegeTypeInterface.ADMIN);
     }
     
     @Override
@@ -23,44 +24,66 @@ public class PrivilegiesTest implements PrivilegiesButtonsInterface {
         return list;
     }
     
-    private void setEvaluatorButtons() {
+    @Override
+    public void setEvaluatorButtons() {
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
         list.add("Calendário");
+        list.add("Palestrante");
+        list.add("Avaliadores");
+        list.add("Comitê");
         list.add("Avaliação");
     }
     
-    private void setNotLoggedButtons() {
+    @Override
+    public void setNotLoggedButtons() {
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
         list.add("Calendário");
+        list.add("Palestrante");
+        list.add("Avaliadores");
+        list.add("Comitê");
     }
 
-    private void setAdminButtons() {
+    @Override
+    public void setAdminButtons() {
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
         list.add("Calendário");
-        list.add("Comitê");
         list.add("Palestrante");
+        list.add("Avaliadores");
+        list.add("Comitê");
         list.add("Categoria");
     }
 
-    private void setBoardButtons() {
+    @Override
+    public void setBoardButtons() {
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
         list.add("Calendário");
+        list.add("Palestrante");
         list.add("Avaliadores");
+        list.add("Comitê");
+        list.add("Critérios");
     }
     
-    private void setUserButtons(){
+    @Override
+    public void setUserButtons(){
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
         list.add("Calendário");
+        list.add("Palestrante");
+        list.add("Avaliadores");
+        list.add("Comitê");
+    }
+    @Override
+    public int getAmountButtons() {
+        return list.size();
     }
     
     @Override
@@ -72,19 +95,19 @@ public class PrivilegiesTest implements PrivilegiesButtonsInterface {
     public void setPrivilegeType(int type) {
         this.type = type;
         switch(this.type) {
-            case PrivilegeType.ADMIN:
+            case PrivilegeTypeInterface.ADMIN:
                 setAdminButtons();
                 break;
-            case PrivilegeType.BOARD:
+            case PrivilegeTypeInterface.BOARD:
                 setBoardButtons();
                 break;
-            case PrivilegeType.EVALUATOR:
+            case PrivilegeTypeInterface.EVALUATOR:
                 setEvaluatorButtons();
                 break;
-            case PrivilegeType.NOTLOGGED:
+            case PrivilegeTypeInterface.NOTLOGGED:
                 setNotLoggedButtons();
                 break;
-            case PrivilegeType.USER:
+            case PrivilegeTypeInterface.USER:
                 setUserButtons();
                 break;
         }
