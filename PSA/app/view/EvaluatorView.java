@@ -1,7 +1,10 @@
 package app.view;
 
 import app.Main;
+import app.control.CRUDCategoryTest;
+import app.control.interfaces.CRUDEvaluatorInterface;
 import app.control.interfaces.PrivilegeTypeInterface;
+import app.view.viewcontrollers.autocompletecheckcombobox.CheckComboBox;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,9 +23,13 @@ import javafx.scene.text.Font;
 public class EvaluatorView {
     private final SplitPane splitPane = new SplitPane();
     private PrivilegeTypeInterface privilege;
+    private final CRUDEvaluatorInterface evaluators;
+    private final CRUDCategoryTest categories;
     
-    public EvaluatorView(PrivilegeTypeInterface privilege) {
+    public EvaluatorView(PrivilegeTypeInterface privilege, CRUDEvaluatorInterface evaluators, CRUDCategoryTest categories) {
         this.privilege = privilege;
+        this.categories = categories;
+        this.evaluators = evaluators;
         setLeft();
         setRight();
         splitPane.setDividerPositions(0.20f);
@@ -39,7 +46,7 @@ public class EvaluatorView {
         
         vbox2.getChildren().addAll(lblMembers);
         
-        ListView<String> listView = new ListView<>(FXCollections.observableArrayList("Jesus", "Antonio", "Agostino"));
+        ListView<String> listView = new ListView<>(FXCollections.observableArrayList(evaluators.getAllEvaluators()));
         
         listView.setStyle("-fx-control-inner-background-alt: white; -fx-font-size: 12; "
                 + "-fx-font-family: 'Segoe UI'");
@@ -61,11 +68,10 @@ public class EvaluatorView {
         TextField name = new TextField();
         TextField area = new TextField();
         DatePicker dob = new DatePicker();
-        TextField specialization = new TextField();
+        CheckComboBox<String> specialization = new CheckComboBox(FXCollections.observableArrayList(categories.getAllCategories()));
         CheckBox evaluator;
         if(privilege.getPrivilegeType() == PrivilegeTypeInterface.BOARD) {
             evaluator = new CheckBox();
-            specialization.setEditable(true);
 
         } else {
             evaluator = new CheckBox(){
@@ -83,13 +89,12 @@ public class EvaluatorView {
         Label lbl = new Label("Lista de eventos que avaliou/avaliando");
         lbl.setFont(Font.font("Segoe UI", 14));
        
-        Main.setStyleTextField(id, name, area, specialization);
+        Main.setStyleTextField(id, name, area);
         dob.setStyle("-fx-font-size:18;-fx-font-family:Segoe UI");
         
         id.setMaxWidth(300);
         name.setMaxWidth(300);
         area.setMaxWidth(300);
-        specialization.setMaxWidth(300);
         dob.setMaxWidth(300);
         
         id.setPromptText("Prontuário");
