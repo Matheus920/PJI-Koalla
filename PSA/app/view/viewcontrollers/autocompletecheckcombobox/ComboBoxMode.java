@@ -23,7 +23,7 @@
  * questions.
  */
 
-package app.autocompletecheckcombobox;
+package app.view.viewcontrollers.autocompletecheckcombobox;
 
 /**
  * Indicates what the look of the ColorPicker control should be. 

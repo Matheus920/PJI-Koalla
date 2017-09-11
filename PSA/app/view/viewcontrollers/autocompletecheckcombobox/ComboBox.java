@@ -23,7 +23,7 @@
  * questions.
  */
 
-package app.autocompletecheckcombobox;
+package app.view.viewcontrollers.autocompletecheckcombobox;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;

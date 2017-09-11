@@ -23,7 +23,7 @@
  * questions.
  */
 
-package app.autocompletecheckcombobox;
+package app.view.viewcontrollers.autocompletecheckcombobox;
 
 import javafx.scene.control.Control;
 import javafx.scene.control.IndexedCell;

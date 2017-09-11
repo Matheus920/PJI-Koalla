@@ -23,7 +23,7 @@
  * questions.
  */
 
-package app.autocompletecheckcombobox;
+package app.view.viewcontrollers.autocompletecheckcombobox;
 
 /**
  * A SelectionModel which enforces the requirement that only a single index
