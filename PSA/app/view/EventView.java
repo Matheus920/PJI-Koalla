@@ -1,6 +1,8 @@
 package app.view;
 
 import app.Main;
+import app.control.CRUDCriteria;
+import app.control.CRUDEvaluator;
 import app.control.interfaces.CRUDCategoryInterface;
 import app.control.interfaces.PrivilegeTypeInterface;
 import javafx.collections.FXCollections;
@@ -58,6 +60,9 @@ public class EventView {
     private CRUDCategoryInterface categories;
     private CRUDListSymposiumsInterface symposiums;
     private PrivilegeTypeInterface privilege;
+    private CRUDEvaluator evaluators = new CRUDEvaluator();
+    private CRUDCriteria criteriaCRUD = new CRUDCriteria();
+
     
     public EventView(CRUDCategoryInterface categories, CRUDListSymposiumsInterface symposiums, PrivilegeTypeInterface privilege) {
         this.categories = categories;
@@ -147,7 +152,7 @@ public class EventView {
         if(privilege.getPrivilegeType() == PrivilegeTypeInterface.BOARD) {
             Button btnNew = new Button("Novo...");
             btnNew.setOnAction(e->{
-                new AddEventView().addEventShow();
+                new AddEventView(evaluators, criteriaCRUD).addEventShow();
             });
             
             btnNew.setFont(Font.font("Segoe UI", 15));
