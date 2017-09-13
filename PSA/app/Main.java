@@ -1,6 +1,7 @@
 package app;
 
 import app.control.CRUDCategoryTest;
+import app.control.CRUDCriteria;
 import app.control.CRUDEvaluator;
 import app.control.CRUDListSymposiumsTest;
 import app.control.CRUDSymposiumTest;
@@ -44,6 +45,7 @@ public class Main extends Application{
     private static CRUDCategoryTest test1 = new CRUDCategoryTest();
     private static CRUDListSymposiumsTest test2 = new CRUDListSymposiumsTest();
     private static CRUDEvaluator test3 = new CRUDEvaluator();
+    private static CRUDCriteria test4 = new CRUDCriteria();
     
     private static int width;
     private static int height;
@@ -125,7 +127,7 @@ public class Main extends Application{
     }
     
     public static void criteriaShow(){
-        CriteriaView criteria = new CriteriaView();
+        CriteriaView criteria = new CriteriaView(test4);
         ListView criteria1 = criteria.getCriteriaList();
         header.setTitle(criteria);
         
