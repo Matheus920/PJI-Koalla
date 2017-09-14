@@ -23,7 +23,7 @@
  * questions.
  */
 
-package app.autocompletecheckcombobox;
+package app.view.viewcontrollers.autocompletecheckcombobox;
 
 import com.sun.javafx.scene.control.Logging;
 import com.sun.javafx.scene.control.skin.Utils;

@@ -1,4 +1,4 @@
-package app.autocompletecheckcombobox;
+package app.view.viewcontrollers.autocompletecheckcombobox;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,19 +13,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBox;
 
-public class CheckComboBox<T extends CheckString> extends ComboBox<CheckBox> {
+public class CheckComboBox<T> extends ComboBox<CheckBox> {
     private ObservableList<T> checkItems;
     private ObservableList<T> selectedItems;
     private Map<T, Integer> itemsMap;
     
     public CheckComboBox(ObservableList<T> items) {
         super();
+        setEditable(false);
         this.checkItems = FXCollections.<T>observableArrayList(items);
         this.selectedItems = FXCollections.<T>observableArrayList();
         ObservableList<CheckBox> x = FXCollections.<CheckBox>observableArrayList();
         itemsMap = new HashMap<T, Integer>();
         for(T a : checkItems) {
-            CheckBox check = new CheckBox(a.checkName());
+            CheckBox check = new CheckBox(a.toString());
             check.selectedProperty().addListener(new ChangeListener<Boolean>(){
                 @Override
                 public void changed(ObservableValue<? extends Boolean> obv, Boolean ov, Boolean nv) {

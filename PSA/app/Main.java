@@ -1,29 +1,21 @@
 package app;
 
 import app.control.CRUDCategoryTest;
+import app.control.CRUDCriteria;
+import app.control.CRUDEvaluator;
 import app.control.CRUDListSymposiumsTest;
 import app.control.CRUDSymposiumTest;
 import app.control.PrivilegiesTest;
 import app.control.interfaces.PrivilegeTypeInterface;
 import app.view.BoardView;
-import app.view.BoardView;
-import app.view.CategoryView;
 import app.view.CategoryView;
 import app.view.CriteriaView;
-import app.view.CriteriaView;
-import app.view.EvaluationView;
 import app.view.EvaluationView;
 import app.view.EvaluatorView;
-import app.view.EvaluatorView;
-import app.view.EventView;
 import app.view.EventView;
 import app.view.HeaderView;
-import app.view.HeaderView;
-import app.view.MenuView;
 import app.view.MenuView;
 import app.view.SpeakerView;
-import app.view.SpeakerView;
-import app.view.SymposiumView;
 import app.view.SymposiumView;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -42,8 +34,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javax.swing.JFormattedTextField;
-import javax.swing.text.MaskFormatter;
 
 public class Main extends Application{
     private static Stage primaryStage = new Stage();
@@ -54,6 +44,8 @@ public class Main extends Application{
     private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeTypeInterface.BOARD);
     private static CRUDCategoryTest test1 = new CRUDCategoryTest();
     private static CRUDListSymposiumsTest test2 = new CRUDListSymposiumsTest();
+    private static CRUDEvaluator test3 = new CRUDEvaluator();
+    private static CRUDCriteria test4 = new CRUDCriteria();
     
     private static int width;
     private static int height;
@@ -131,11 +123,11 @@ public class Main extends Application{
         header.refresh();
         header.setTitleAndSubTitle("Avaliadores", "Avaliadores do IFSP");
         root.setTop(header.headerShow());
-        root.setCenter(new EvaluatorView(test).evaluatorShow());
+        root.setCenter(new EvaluatorView(test, test3, test1).evaluatorShow());
     }
     
     public static void criteriaShow(){
-        CriteriaView criteria = new CriteriaView();
+        CriteriaView criteria = new CriteriaView(test4);
         ListView criteria1 = criteria.getCriteriaList();
         header.setTitle(criteria);
         

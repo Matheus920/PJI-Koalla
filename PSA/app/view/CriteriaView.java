@@ -1,6 +1,7 @@
 package app.view;
 
 import app.Main;
+import app.control.interfaces.CRUDCriteriaInterface;
 import java.util.List;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -30,6 +31,11 @@ public class CriteriaView {
     private final ObservableList<AnchorPane> items = FXCollections.observableArrayList();
     private final ListView<AnchorPane> list = new ListView(items);
     private final TextArea txtDescription = new TextArea();
+    private final CRUDCriteriaInterface criteria;
+    
+    public CriteriaView(CRUDCriteriaInterface criteria){
+        this.criteria = criteria;
+    }
     
     public ListView getCriteriaList(){
         setItems();
@@ -38,8 +44,7 @@ public class CriteriaView {
     } 
     
     private void setItems(){
-        setContent("Normas ABNT", "Regras de Conduta", "Utilização de Argumentos Formais",
-                "Lógica Bem Construída");
+        setContent(criteria.getAllCriteria());
     }
     
     private void setLists(){
@@ -132,11 +137,11 @@ public class CriteriaView {
        if(alert.getResult() == ButtonType.YES){
            int index = list.getSelectionModel().getSelectedIndex();
            list.getItems().remove(index);
-           //TODO: deletar da inteface
+           criteria.deleteCriteriaById(index);
        }
-   }
+    }
    
-   private void showDescriptionDialog(String title, int index){
+    private void showDescriptionDialog(String title, int index){
        
        Stage stage = new Stage();
        
@@ -200,6 +205,7 @@ public class CriteriaView {
            gridPane.add(hbox1, 1, 2);
            
            btnSave.setOnAction(e1 -> {
+               criteria.updateCriteriaById(index, txtTitle.getText());
                ((Text)items.get(index).getChildren().get(0)).setText(txtTitle.getText());
                txtDescription.setText(txtDescription.getText());
                gridPane.getChildren().remove(hbox1);
@@ -222,59 +228,60 @@ public class CriteriaView {
        stage.setScene(scene);
        stage.showAndWait();
        
-   }
-   void showAddDialog(){
-    Stage stage = new Stage();
-    stage.setTitle("Adicionar categoria");
-    stage.getIcons().add(new Image(getClass().getResourceAsStream("koala1.png")));
-   
-    GridPane gridPane = new GridPane();
-    Label lblTitle = new Label("Título:");
-    TextField txtTitle = new TextField();
+    }
+    void showAddDialog(){
+     Stage stage = new Stage();
+     stage.setTitle("Adicionar categoria");
+     stage.getIcons().add(new Image(getClass().getResourceAsStream("koala1.png")));
 
-    Label lblDescription = new Label("Descrição:");
+     GridPane gridPane = new GridPane();
+     Label lblTitle = new Label("Título:");
+     TextField txtTitle = new TextField();
 
-    Button btnSave = new Button("Salvar");
-    Button btnCancel = new Button("Cancelar");
+     Label lblDescription = new Label("Descrição:");
 
-    btnSave.setFont(Font.font("Segoe UI", 18));
-    btnCancel.setFont(Font.font("Segoe UI", 18));
+     Button btnSave = new Button("Salvar");
+     Button btnCancel = new Button("Cancelar");
 
-    HBox hbox = new HBox(btnSave, btnCancel);
-    hbox.setSpacing(5);
-    txtDescription.setEditable(true);
-    
-    btnSave.setOnAction(e -> {
-        setContent(txtTitle.getText());
-        txtDescription.setText(txtDescription.getText());
-        stage.close();
-    });
-   
-   
-    btnCancel.setOnAction(e -> {
-        stage.close();
-    });
+     btnSave.setFont(Font.font("Segoe UI", 18));
+     btnCancel.setFont(Font.font("Segoe UI", 18));
 
-    gridPane.setAlignment(Pos.CENTER);
+     HBox hbox = new HBox(btnSave, btnCancel);
+     hbox.setSpacing(5);
+     txtDescription.setEditable(true);
 
-    gridPane.add(lblTitle, 0, 0);
-    gridPane.add(txtTitle, 1, 0);
-    gridPane.add(lblDescription, 0, 1);
-    gridPane.add(txtDescription, 1, 1);
+     btnSave.setOnAction(e -> {
+         criteria.addCriteria(txtTitle.getText());
+         setContent(txtTitle.getText());
+         txtDescription.setText(txtDescription.getText());
+         stage.close();
+     });
 
-    gridPane.setHgap(10);
-    gridPane.setVgap(20);
 
-    gridPane.add(hbox, 1, 2);
+     btnCancel.setOnAction(e -> {
+         stage.close();
+     });
 
-    hbox.setAlignment(Pos.BASELINE_RIGHT);
-    
-    Scene scene = new Scene(gridPane, 575, 300); 
-       
-    Main.setBackgroundWhite(gridPane);
-    stage.initModality(Modality.APPLICATION_MODAL);
-    stage.setScene(scene);
-    stage.showAndWait();
+     gridPane.setAlignment(Pos.CENTER);
 
-  } 
+     gridPane.add(lblTitle, 0, 0);
+     gridPane.add(txtTitle, 1, 0);
+     gridPane.add(lblDescription, 0, 1);
+     gridPane.add(txtDescription, 1, 1);
+
+     gridPane.setHgap(10);
+     gridPane.setVgap(20);
+
+     gridPane.add(hbox, 1, 2);
+
+     hbox.setAlignment(Pos.BASELINE_RIGHT);
+
+     Scene scene = new Scene(gridPane, 575, 300); 
+
+     Main.setBackgroundWhite(gridPane);
+     stage.initModality(Modality.APPLICATION_MODAL);
+     stage.setScene(scene);
+     stage.showAndWait();
+
+   } 
 }

@@ -1,9 +1,15 @@
 package app.view;
 
 import app.Main;
+import app.control.CRUDCategoryTest;
+import app.control.interfaces.CRUDEvaluatorInterface;
 import app.control.interfaces.PrivilegeTypeInterface;
+import app.view.viewcontrollers.autocompletecheckcombobox.CheckComboBox;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -13,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -20,9 +27,13 @@ import javafx.scene.text.Font;
 public class EvaluatorView {
     private final SplitPane splitPane = new SplitPane();
     private PrivilegeTypeInterface privilege;
+    private final CRUDEvaluatorInterface evaluators;
+    private final CRUDCategoryTest categories;
     
-    public EvaluatorView(PrivilegeTypeInterface privilege) {
+    public EvaluatorView(PrivilegeTypeInterface privilege, CRUDEvaluatorInterface evaluators, CRUDCategoryTest categories) {
         this.privilege = privilege;
+        this.categories = categories;
+        this.evaluators = evaluators;
         setLeft();
         setRight();
         splitPane.setDividerPositions(0.20f);
@@ -39,7 +50,7 @@ public class EvaluatorView {
         
         vbox2.getChildren().addAll(lblMembers);
         
-        ListView<String> listView = new ListView<>(FXCollections.observableArrayList("Jesus", "Antonio", "Agostino"));
+        ListView<String> listView = new ListView<>(FXCollections.observableArrayList(evaluators.getAllEvaluators()));
         
         listView.setStyle("-fx-control-inner-background-alt: white; -fx-font-size: 12; "
                 + "-fx-font-family: 'Segoe UI'");
@@ -61,11 +72,11 @@ public class EvaluatorView {
         TextField name = new TextField();
         TextField area = new TextField();
         DatePicker dob = new DatePicker();
-        TextField specialization = new TextField();
+        Label specializations = new Label("Áreas de especialização: ");
+        CheckComboBox<String> specialization = new CheckComboBox(FXCollections.observableArrayList(categories.getAllCategories()));
         CheckBox evaluator;
         if(privilege.getPrivilegeType() == PrivilegeTypeInterface.BOARD) {
             evaluator = new CheckBox();
-            specialization.setEditable(true);
 
         } else {
             evaluator = new CheckBox(){
@@ -75,7 +86,7 @@ public class EvaluatorView {
                 }
             };
             
-            specialization.setEditable(false);
+            specialization.setVisible(false);
         }
         
         evaluator.setText("Avaliador");
@@ -83,13 +94,12 @@ public class EvaluatorView {
         Label lbl = new Label("Lista de eventos que avaliou/avaliando");
         lbl.setFont(Font.font("Segoe UI", 14));
        
-        Main.setStyleTextField(id, name, area, specialization);
+        Main.setStyleTextField(id, name, area);
         dob.setStyle("-fx-font-size:18;-fx-font-family:Segoe UI");
         
         id.setMaxWidth(300);
         name.setMaxWidth(300);
         area.setMaxWidth(300);
-        specialization.setMaxWidth(300);
         dob.setMaxWidth(300);
         
         id.setPromptText("Prontuário");
@@ -97,6 +107,34 @@ public class EvaluatorView {
         area.setPromptText("Área");
         dob.setPromptText("Data de nascimento");
         specialization.setPromptText("Especialização");
+        
+        FlowPane flowPane = new FlowPane();
+        
+        for(CheckBox selectedEvaluator : specialization.getItems()){
+            selectedEvaluator.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    Label a = new Label((char)0x2022 + selectedEvaluator.getText());
+                    flowPane.getChildren().add(a);
+                }else {
+                    for(int i = 0; i < flowPane.getChildren().size(); i++) {
+                        if(((Label)flowPane.getChildren().get(i)).getText().contains(selectedEvaluator.getText())) {
+                            flowPane.getChildren().remove(i);
+                        }
+                    }
+                }
+
+                }
+            });
+        }
+        
+        HBox hbox = new HBox(specializations, flowPane);
+        
+        flowPane.setHgap(40);
+        flowPane.setVgap(5);
+        flowPane.setOrientation(Orientation.HORIZONTAL);
+        flowPane.setPrefWrapLength(100);
         
         id.setEditable(false);
         name.setEditable(false);
@@ -109,7 +147,7 @@ public class EvaluatorView {
         
         evaluator.setSelected(false);        
         
-        vbox1.getChildren().addAll(id, name, dob, area, evaluator, specialization);
+        vbox1.getChildren().addAll(id, name, dob, area, evaluator, specialization, hbox);
         
         if(privilege.getPrivilegeType() == PrivilegeTypeInterface.BOARD) {
             Button save = new Button("Salvar");

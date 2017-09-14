@@ -1,4 +1,4 @@
-package app.autocompletecheckcombobox;
+package app.view.viewcontrollers.autocompletecheckcombobox;
 
 import java.util.stream.Stream;
 import javafx.collections.FXCollections;
