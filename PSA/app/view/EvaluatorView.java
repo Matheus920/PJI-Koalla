@@ -73,7 +73,7 @@ public class EvaluatorView {
         TextField area = new TextField();
         DatePicker dob = new DatePicker();
         Label specializations = new Label("Áreas de especialização: ");
-        CheckComboBox<String> specialization = new CheckComboBox(FXCollections.observableArrayList(categories.getAllCategories()));
+        CheckComboBox<String> specialization = new CheckComboBox(FXCollections.observableArrayList(categories.getAllCategories()), "Especialização");
         CheckBox evaluator;
         if(privilege.getPrivilegeType() == PrivilegeTypeInterface.BOARD) {
             evaluator = new CheckBox();
@@ -106,7 +106,6 @@ public class EvaluatorView {
         name.setPromptText("Nome");
         area.setPromptText("Área");
         dob.setPromptText("Data de nascimento");
-        specialization.setPromptText("Especialização");
         
         FlowPane flowPane = new FlowPane();
         

@@ -134,9 +134,8 @@ public class AddEventView {
         
         
         Label lblEvaluators = new Label("Lista de avaliadores:");
-        CheckComboBox<String> ccbEvaluators = new CheckComboBox(FXCollections.observableArrayList(evaluators.getAllEvaluators()));
-        ccbEvaluators.setPromptText("Avaliadores");
-        
+        CheckComboBox<String> ccbEvaluators = new CheckComboBox(FXCollections.observableArrayList(evaluators.getAllEvaluators()), "Avaliadores");
+
         Label lblSelectedEvaluators = new Label("Avaliadores selecionados:");
         FlowPane flowPaneEvaluators = new FlowPane();
         
@@ -161,8 +160,7 @@ public class AddEventView {
             
         
         Label lblCriteria = new Label("Lista de critérios:");
-        CheckComboBox<String> ccbCriteria = new CheckComboBox(FXCollections.observableArrayList(criteria.getAllCriteria()));
-        ccbCriteria.setPromptText("Critérios");
+        CheckComboBox<String> ccbCriteria = new CheckComboBox(FXCollections.observableArrayList(criteria.getAllCriteria()), "Critérios");
         Label lblSelectedCriteria = new Label("Critérios selecionados:");
         FlowPane flowPaneCriteria = new FlowPane();
         
