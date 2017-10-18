@@ -57,10 +57,10 @@ public class CheckComboBox<T> extends ComboBox<CheckBox> {
         new AutoCompleteComboBox<CheckBox>().bindAutoComplete(this);
     }
 
-    public CheckComboBox(ObservableList<T> items, String text) {
+    public CheckComboBox(ObservableList<T> items, String title) {
         super();
+        super.setPromptText(title);
         setEditable(false);
-        setPromptText(text);
         this.checkItems = FXCollections.<T>observableArrayList(items);
         this.selectedItems = FXCollections.<T>observableArrayList();
         ObservableList<CheckBox> x = FXCollections.<CheckBox>observableArrayList();
@@ -96,7 +96,7 @@ public class CheckComboBox<T> extends ComboBox<CheckBox> {
         super.setItems(x);
         new AutoCompleteComboBox<CheckBox>().bindAutoComplete(this);
     }
-
+    
     public ObservableList<T> getCheckItems() {
         return checkItems;
     }
