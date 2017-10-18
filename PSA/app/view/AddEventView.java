@@ -236,7 +236,10 @@ public class AddEventView {
                         @Override
                         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                             if(newValue){
+                                HBox hboxTemp = new HBox();
                                 Label a = new Label((char)0x2022 + selectedEvaluator.getText());
+                                
+                                
                                 flowPaneEvaluators.getChildren().add(a);
                             }else {
                                 for(int i = 0; i < flowPaneEvaluators.getChildren().size(); i++) {
@@ -304,7 +307,20 @@ public class AddEventView {
                         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                             if(newValue){
                                 Label a = new Label((char)0x2022 + selectedCriteria.getText());
-                                flowPaneCriteria.getChildren().add(a);
+                                Label lblValue = new Label("Peso:");
+                                TextField tfValue = new TextField();
+                                tfValue.setPrefSize(30, 20);
+                                
+                                
+                                MaskField.maxField(tfValue, 100);
+                                MaskField.ignoreKeys(tfValue);
+                                MaskField.numericField(tfValue);
+                                HBox hBoxTemp = new HBox();
+                                hBoxTemp.getChildren().addAll(a, lblValue, tfValue);
+                                
+                                hBoxTemp.setSpacing(15);
+                                
+                                flowPaneCriteria.getChildren().add(hBoxTemp);
                             }else {
                                 for(int i = 0; i < flowPaneCriteria.getChildren().size(); i++) {
                                     if(((Label)flowPaneCriteria.getChildren().get(i)).getText().contains(selectedCriteria.getText())) {
@@ -367,7 +383,7 @@ public class AddEventView {
         vbox1.setAlignment(Pos.TOP_CENTER);
         vbox1.setPadding(new Insets(10, 0, 0, 0));
         stackPane.getChildren().add(vbox1);
-        Scene scene = new Scene(stackPane, 730, 600);
+        Scene scene = new Scene(stackPane, 830, 600);
         stage.setScene(scene);
     }
     
@@ -392,16 +408,21 @@ public class AddEventView {
         TextField tfPlace = new TextField();
         Label lblVacancies = new Label("Capacidade: ");
         TextField tfVacancies = new TextField();
+        Label lblSpeakersVacancies = new Label("Quantidade de palestrantes: ");
+        TextField tfSpeakersVacancies = new TextField();
         
         MaskField.ignoreKeys(tfVacancies);
         MaskField.numericField(tfVacancies);
+        MaskField.ignoreKeys(tfSpeakersVacancies);
+        MaskField.numericField(tfSpeakersVacancies);
+        
         
         Label lblSpeakerName = new Label("Nome do palestrante: ");
         TextField tfSpeakerName = new TextField();
         
         VBox vbox = new VBox();
         VBox vbox1 = new VBox();
-        HBox hbox2 = new HBox(lblPlace, tfPlace, lblVacancies, tfVacancies);
+        HBox hbox2 = new HBox(lblPlace, tfPlace, lblVacancies, tfVacancies, lblSpeakersVacancies, tfSpeakersVacancies);
         
         hbox2.setSpacing(10);
         vbox1.setSpacing(10);
@@ -588,7 +609,7 @@ public class AddEventView {
             
         });
         
-        Scene scene = new Scene(stackPane, 730, 600);
+        Scene scene = new Scene(stackPane, 830, 600);
         stage.setScene(scene);
     }
     
