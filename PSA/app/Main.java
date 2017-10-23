@@ -40,8 +40,8 @@ public class Main extends Application{
     private static BorderPane root = new BorderPane();
     private static HeaderView header;
     private static Scene scene;
-    
-    private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeTypeInterface.BOARD);
+    // TODO: tirar botão do comitê
+    private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeTypeInterface.EVALUATOR);
     private static CRUDCategoryTest test1 = new CRUDCategoryTest();
     private static CRUDListSymposiumsTest test2 = new CRUDListSymposiumsTest();
     private static CRUDEvaluator test3 = new CRUDEvaluator();

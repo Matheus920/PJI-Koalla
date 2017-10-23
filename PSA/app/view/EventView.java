@@ -152,7 +152,7 @@ public class EventView {
         if(privilege.getPrivilegeType() == PrivilegeTypeInterface.BOARD) {
             Button btnNew = new Button("Novo...");
             btnNew.setOnAction(e->{
-                new AddEventView(evaluators, criteriaCRUD).addEventShow();
+                new AddEventView(evaluators, criteriaCRUD, categories).addEventShow();
             });
             
             btnNew.setFont(Font.font("Segoe UI", 15));
