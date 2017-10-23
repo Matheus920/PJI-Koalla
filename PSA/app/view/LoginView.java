@@ -1,5 +1,8 @@
 package app.view;
 
+import app.Main;
+import app.control.LoginController;
+import app.control.interfaces.PrivilegeTypeInterface;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,9 +22,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.controlsfx.validation.Severity;
-import org.controlsfx.validation.ValidationSupport;
-import org.controlsfx.validation.Validator;
 
 public class LoginView {
     private final Label lblUser = new Label("Usuário:");
@@ -33,8 +33,11 @@ public class LoginView {
     private final Stage stage = new Stage();
     private final GridPane gridPane = new GridPane();
     private final Scene scene = new Scene(gridPane, 400, 300);
+    private final Label lblError = new Label("");
     
-    public LoginView() {
+    private final PrivilegeTypeInterface test;
+    public LoginView(PrivilegeTypeInterface test) {
+        this.test = test;
         setLabels();
         setButtons();
         setFields();
@@ -50,16 +53,20 @@ public class LoginView {
         gridPane.setHgap(20);
         gridPane.setVgap(20);
         
-        gridPane.add(lblUser, 0, 0);
-        gridPane.add(tfUser, 1, 0);
-        gridPane.add(lblPassword, 0, 1);
-        gridPane.add(pfPassword, 1, 1);
-        gridPane.add(hbox, 1, 2);
+        gridPane.add(lblError, 0, 0);
+        gridPane.add(lblUser, 0, 1);
+        gridPane.add(tfUser, 1, 1);
+        gridPane.add(lblPassword, 0, 2);
+        gridPane.add(pfPassword, 1, 2);
+        gridPane.add(hbox, 1, 3);
         
         GridPane.setHalignment(lblPassword, HPos.RIGHT);
+        GridPane.setHalignment(lblError, HPos.CENTER);
+        GridPane.setColumnSpan(lblError, GridPane.REMAINING);
         
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
+       
     }
     
     private void setLabels() {
@@ -76,8 +83,17 @@ public class LoginView {
         
         sign.setOnAction(e ->{
             stage.setTitle("Registrar");
-            stage.setScene(new SignView().signShow());
-            stage.centerOnScreen();
+            new SignView(stage);
+        });
+        
+        login.setOnAction(e-> {
+           if(new LoginController().exists(tfUser.getText(), pfPassword.getText(), test)){
+               stage.close();
+               Main.refresh();
+           }else{
+                lblError.setText("Email ou senha não conferem, tente novamente.");
+                lblError.setStyle("-fx-text-fill: red;");
+           }
         });
     }
     

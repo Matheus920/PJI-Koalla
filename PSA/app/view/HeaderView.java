@@ -105,7 +105,7 @@ public class HeaderView {
        login.setFont(Font.font("Segoe UI", 15));
        login.setCursor(Cursor.HAND);
        login.setOnAction(e->{
-           new LoginView();
+           new LoginView(privilege);
        });
     }
     
