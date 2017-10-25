@@ -2,6 +2,7 @@ package app.view;
 
 import app.Main;
 import app.control.interfaces.CRUDCriteriaInterface;
+import app.model.Criteria;
 import java.util.List;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -28,8 +29,8 @@ import javafx.stage.Stage;
 
 public class CriteriaView {
    
-    private final ObservableList<AnchorPane> items = FXCollections.observableArrayList();
-    private final ListView<AnchorPane> list = new ListView(items);
+    private final ObservableList<Criteria> items = FXCollections.observableArrayList();
+    private final ListView<AnchorPane> list = new ListView();
     private final TextArea txtDescription = new TextArea();
     private final CRUDCriteriaInterface criteria;
     
@@ -60,19 +61,23 @@ public class CriteriaView {
         });
         
         list.setOnMouseClicked(e -> {
-           if(e.getClickCount() == 2){
-               showDescriptionDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), 
-                       list.getSelectionModel().getSelectedIndex());
-           }
+            if(!(list.getSelectionModel().getSelectedItem() == null)) {
+                if(e.getClickCount() == 2){
+                    if(!list.getItems().isEmpty())
+                        showDescriptionDialog(items.get(list.getSelectionModel().getSelectedIndex()), 
+                            list.getSelectionModel().getSelectedIndex());
+                }
+            }
         });
         
         list.setCursor(Cursor.HAND);
     }
     
-    private void setContent(String... content){
-        for(String a : content){
+    private void setContent(Criteria... content){
+        for(Criteria a : content){
+            items.add(a);
             AnchorPane anchorPane = new AnchorPane();
-            Text text = new Text(a);
+            Text text = new Text(a.getNome());
             
             Button delete = new Button("X");
             delete.setMinSize(5, 3);
@@ -90,14 +95,15 @@ public class CriteriaView {
             AnchorPane.setTopAnchor(delete, 2.0);
             AnchorPane.setBottomAnchor(text, 3.0);
             
-            items.add(anchorPane);
+            list.getItems().add(anchorPane);
         }
     }
     
-     private void setContent(List<String> content) {
-        for(String a : content) {
+     private void setContent(List<Criteria> content) {
+        for(Criteria a : content) {
+            items.add(a);
             AnchorPane anchorPane = new AnchorPane();
-            Text text = new Text(a);
+            Text text = new Text(a.getNome());
             Button btn = new Button("X");
             btn.setMinSize(5, 3);
             btn.setFont(Font.font("Segoe UI", 10));
@@ -116,7 +122,7 @@ public class CriteriaView {
             
 
             
-            items.add(anchorPane);
+            list.getItems().add(anchorPane);
         }
     }
      
@@ -137,11 +143,12 @@ public class CriteriaView {
        if(alert.getResult() == ButtonType.YES){
            int index = list.getSelectionModel().getSelectedIndex();
            list.getItems().remove(index);
-           criteria.deleteCriteriaById(index);
+           Criteria toDelete = criteria.getCriteriaById(items.get(index).getId());
+           criteria.deleteCriteria(toDelete);
        }
     }
    
-    private void showDescriptionDialog(String title, int index){
+    private void showDescriptionDialog(Criteria ct, int index){
        
        Stage stage = new Stage();
        
@@ -150,13 +157,13 @@ public class CriteriaView {
 
        GridPane gridPane = new GridPane();
        Label lblTitle = new Label("Título:");
-       TextField txtTitle = new TextField(title);
+       TextField txtTitle = new TextField(ct.getNome());
        
        Label lblDescription = new Label("Descrição:");
        
        txtTitle.setEditable(false);
        txtDescription.setEditable(false);
-
+       txtDescription.setText(ct.getDescricao());
        
        Button btnEdit = new Button("Editar");
        Button btnCancel = new Button("Cancelar");
@@ -189,6 +196,7 @@ public class CriteriaView {
        btnEdit.setOnAction(e -> {
            txtTitle.setEditable(true);
            txtDescription.setEditable(true);
+           String oldTitle = txtTitle.getText();
            
            gridPane.getChildren().remove(hbox);
            
@@ -205,15 +213,25 @@ public class CriteriaView {
            gridPane.add(hbox1, 1, 2);
            
            btnSave.setOnAction(e1 -> {
-               criteria.updateCriteriaById(index, txtTitle.getText());
-               ((Text)items.get(index).getChildren().get(0)).setText(txtTitle.getText());
-               txtDescription.setText(txtDescription.getText());
-               gridPane.getChildren().remove(hbox1);
-               
-               gridPane.add(hbox, 1, 2);
-               
-               
-               stage.close();
+               if(!criteria.exists(txtTitle.getText()) || (txtTitle.getText().equals(oldTitle))){
+
+                gridPane.getChildren().remove(hbox1);
+                gridPane.add(hbox, 1, 2);
+                
+                Criteria oldCriteria = criteria.getCriteriaById(items.get(index).getId());
+                oldCriteria.setNome(txtTitle.getText());
+                oldCriteria.setDescricao(txtDescription.getText());
+                criteria.updateCriteria(oldCriteria);
+                
+                ((Text)list.getItems().get(index).getChildren().get(0)).setText(txtTitle.getText());
+                txtDescription.setText(txtDescription.getText());
+                
+                stage.close();
+                
+               }
+               else{
+                   //TODO: label de error
+               }
            });
        });
        
@@ -251,10 +269,15 @@ public class CriteriaView {
      txtDescription.setEditable(true);
 
      btnSave.setOnAction(e -> {
-         criteria.addCriteria(txtTitle.getText());
-         setContent(txtTitle.getText());
-         txtDescription.setText(txtDescription.getText());
-         stage.close();
+         if(!criteria.exists(txtTitle.getText())){
+            criteria.addCriteria(new Criteria(txtTitle.getText(), txtDescription.getText()));
+            setContent(new Criteria(txtTitle.getText()));
+            txtDescription.setText(txtDescription.getText());
+            stage.close();
+         }
+         else{
+             //TODO: label de error
+         }
      });
 
 

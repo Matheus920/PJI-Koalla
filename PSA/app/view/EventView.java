@@ -32,6 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import app.control.interfaces.CRUDListSymposiumsInterface;
+import app.model.Category;
 import java.util.ArrayList;
 import java.util.List;
 import org.controlsfx.control.textfield.TextFields;
@@ -41,8 +42,8 @@ public class EventView {
     private final Label lblCategory = new Label("Categoria: ");
     private final Label lblDate = new Label("Data: ");
     private final TextField tfSearch = new TextField();
-    private final ObservableList<String> dataCategory = FXCollections.observableArrayList();
-    private final ComboBox cbCategory = new ComboBox(dataCategory);
+    private final ObservableList<Category> dataCategory = FXCollections.observableArrayList();
+    private final ComboBox<String> cbCategory = new ComboBox();
     private final DatePicker dpDate = new DatePicker(); 
     private final RadioButton rbOpened = new RadioButton("Abertos");
     private final RadioButton rbClosed = new RadioButton("Encerrados");
@@ -102,7 +103,10 @@ public class EventView {
     
     private void setComboBoxes() {
         dataCategory.addAll(categories.getAllCategories());
-        dataCategory.add("");
+        dataCategory.add(new Category(""));
+        for(Category a : dataCategory) {
+            cbCategory.getItems().add(a.getNome());
+        }
     }
     
     private void setButtons() {

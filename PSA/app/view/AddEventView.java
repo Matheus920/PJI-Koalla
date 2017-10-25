@@ -4,6 +4,8 @@ import app.Main;
 import app.control.interfaces.CRUDCategoryInterface;
 import app.control.interfaces.CRUDCriteriaInterface;
 import app.control.interfaces.CRUDEvaluatorInterface;
+import app.model.Category;
+import app.model.Criteria;
 import app.view.viewcontrollers.MaskField;
 import app.view.viewcontrollers.autocompletecheckcombobox.CheckComboBox;
 import javafx.beans.value.ChangeListener;
@@ -187,7 +189,16 @@ public class AddEventView {
         }
 
         Label lblCriteria = new Label("Lista de critérios:");
-        CheckComboBox<String> ccbCriteria = new CheckComboBox(FXCollections.observableArrayList(criteria.getAllCriteria()), "Critérios");
+        
+        ObservableList<Criteria> criteriaData = FXCollections.observableArrayList(criteria.getAllCriteria());
+        ObservableList<String> criteriaDataString = FXCollections.observableArrayList();
+        
+        for(Criteria a : criteriaData){
+            criteriaDataString.add(a.getNome());
+        }
+        
+        CheckComboBox<String> ccbCriteria = new CheckComboBox(criteriaDataString, "Critérios");
+        
         Label lblSelectedCriteria = new Label("Critérios selecionados:");
         FlowPane flowPaneCriteria = new FlowPane();
         
@@ -197,7 +208,20 @@ public class AddEventView {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue){
                     Label a = new Label((char)0x2022 + selectedCategory.getText());
-                    flowPaneCriteria.getChildren().add(a);
+                    Label lblValue = new Label("Peso:");
+                    TextField tfValue = new TextField();
+                    tfValue.setPrefSize(30, 20);
+
+
+                    MaskField.maxField(tfValue, 100);
+                    MaskField.ignoreKeys(tfValue);
+                    MaskField.numericField(tfValue);
+                    HBox hBoxTemp = new HBox();
+                    hBoxTemp.getChildren().addAll(a, lblValue, tfValue);
+
+                    hBoxTemp.setSpacing(15);
+
+                    flowPaneCriteria.getChildren().add(hBoxTemp);
                 }else {
                     for(int i = 0; i < flowPaneCriteria.getChildren().size(); i++) {
                         if(((Label)flowPaneCriteria.getChildren().get(i)).getText().contains(selectedCategory.getText())) {
@@ -295,8 +319,16 @@ public class AddEventView {
             Scene scene = new Scene(gridPane, 400, 200);
             
             confirm.setOnAction(e1->{
-                criteria.addCriteria(tfNewCriteria.getText());
-                CheckComboBox<String> temp = new CheckComboBox(FXCollections.observableArrayList(criteria.getAllCriteria()), "Critérios");
+                criteria.addCriteria(new Criteria(tfNewCriteria.getText()));
+                
+                ObservableList<Criteria> criteriaData1 = FXCollections.observableArrayList(criteria.getAllCriteria());
+                ObservableList<String> criteriaDataString1 = FXCollections.observableArrayList();
+        
+                for(Criteria a : criteriaData1){
+                    criteriaDataString1.add(a.getNome());
+                }
+                
+                CheckComboBox<String> temp = new CheckComboBox(criteriaDataString1, "Critérios");
                 temp.setPrefWidth(lengthBiggestString(temp.getCheckItems()) * 7);
                 hbox2.getChildren().set(1,temp);
                 flowPaneCriteria.getChildren().clear();
@@ -477,9 +509,14 @@ public class AddEventView {
         
         VBox vbox2 = new VBox();
         
+        ObservableList<Category> categoriesData = FXCollections.observableArrayList(categories.getAllCategories());
+        ObservableList<String> categoriesDataString = FXCollections.observableArrayList();
+        for(Category a : categoriesData){
+            categoriesDataString.add(a.getNome());
+        }
         Label lblCategories = new Label("Defina as categorias: ");
-        CheckComboBox<String> ccbCategories = new CheckComboBox(FXCollections.observableArrayList(categories.getAllCategories())
-        , "Categorias");
+        CheckComboBox<String> ccbCategories = new CheckComboBox(categoriesDataString, "Categorias");
+        
         Label lblSelectedCategories = new Label("Categorias selecionadas: ");
         
         ccbCategories.setPrefWidth(lengthBiggestString(ccbCategories.getCheckItems()) * 11);
@@ -512,6 +549,7 @@ public class AddEventView {
             selectedCategory.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    System.out.println(ccbCategories.getSelectedItemsIds());
                     if(newValue){
                         Label a = new Label((char)0x2022 + selectedCategory.getText());
                         fpCategories.getChildren().add(a);
@@ -570,8 +608,13 @@ public class AddEventView {
             Scene scene = new Scene(gridPane, 400, 200);
             
             confirm.setOnAction(e1->{
-                categories.addCategory(tfNewCategory.getText());
-                CheckComboBox<String> temp = new CheckComboBox(FXCollections.observableArrayList(categories.getAllCategories()), "Categorias");
+                categories.addCategory(new Category(tfNewCategory.getText()));
+                ObservableList<Category> categoriesData1 = FXCollections.observableArrayList(categories.getAllCategories());
+                ObservableList<String> categoriesDataString1 = FXCollections.observableArrayList();
+                for(Category a : categoriesData1){
+                    categoriesDataString1.add(a.getNome());
+                }
+                CheckComboBox<String> temp = new CheckComboBox(categoriesDataString1, "Categorias");
                 temp.setPrefWidth(lengthBiggestString(temp.getCheckItems()) * 7);
                 hbox3.getChildren().set(1,temp);
                 fpCategories.getChildren().clear();

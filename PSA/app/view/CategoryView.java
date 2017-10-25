@@ -24,11 +24,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import app.control.interfaces.CRUDCategoryInterface;
+import app.model.Category;
 import javafx.scene.input.KeyCode;
 
 public class CategoryView {
-    private final ObservableList<AnchorPane> items  = FXCollections.observableArrayList();
-    private final ListView<AnchorPane> list = new ListView(items);
+    private final ObservableList<Category> items  = FXCollections.observableArrayList();
+    private final ListView<AnchorPane> list = new ListView();
     private final CRUDCategoryInterface categories;
     
     public CategoryView(CRUDCategoryInterface categories) {
@@ -42,14 +43,15 @@ public class CategoryView {
     }
     
     private  void setItems(){
-        setContent(categories.getAllCategories());
+       setContent(categories.getAllCategories());
     }
     
     
-    private void setContent(String... content) {
-        for(String a : content) {
+    private void setContent(Category... content) {
+        for(Category a : content) {
+            items.add(a);
             AnchorPane anchorPane = new AnchorPane();
-            Text text = new Text(a);
+            Text text = new Text(a.getNome());
             Button btn = new Button("X");
             btn.setMinSize(5, 3);
             btn.setFont(Font.font("Segoe UI", 10));
@@ -66,14 +68,15 @@ public class CategoryView {
             AnchorPane.setTopAnchor(btn, 2.0);
             AnchorPane.setBottomAnchor(text, 3.0);
             
-            items.add(anchorPane);
+            list.getItems().add(anchorPane);
         }
     }
     
-    private void setContent(List<String> content) {
-        for(String a : content) {
+    private void setContent(List<Category> content) {
+        for(Category a : content) {
+            items.add(a);
             AnchorPane anchorPane = new AnchorPane();
-            Text text = new Text(a);
+            Text text = new Text(a.getNome());
             Button btn = new Button("X");
             btn.setMinSize(5, 3);
             btn.setFont(Font.font("Segoe UI", 10));
@@ -92,7 +95,7 @@ public class CategoryView {
             
 
             
-            items.add(anchorPane);
+            list.getItems().add(anchorPane);
         }
     }
     
@@ -108,17 +111,24 @@ public class CategoryView {
             oldv.getChildren().get(1).visibleProperty().set(false);
         });
         
-        list.setOnMouseClicked(e -> {
-            if(e.getClickCount() == 2){
-               showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
-            }
-        });
+        if(list.getSelectionModel().getSelectedItem() != null){
+           
+            list.setOnMouseClicked(e -> {
+                if(e.getClickCount() == 2){
+                   if(!list.getItems().isEmpty())
+                   showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
+                }
+            });
+        }
         
-        list.setOnKeyPressed(e->{
-            if(e.getCode() == KeyCode.ENTER) {
-               showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
-            }
-        });
+        if(list.getSelectionModel().getSelectedItem() != null){
+            list.setOnKeyPressed(e->{
+                if(e.getCode() == KeyCode.ENTER) {
+                   if(!list.getItems().isEmpty())
+                   showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
+                }
+            });
+        }
         
         list.setCursor(Cursor.HAND);
     }
@@ -146,15 +156,32 @@ public class CategoryView {
        buttonCancel.setFont(Font.font("Segoe UI", 18));
        
        buttonOk.setOnAction(e->{
-           categories.updateCategoryById(index, textField.getText());
-           ((Text)items.get(index).getChildren().get(0)).setText(textField.getText());
-           stage.close();
+           
+           if(!categories.exists(textField.getText())){
+            
+            Category oldCategory = categories.getCategoryById(items.get(index).getId());
+            oldCategory.setNome(textField.getText());
+            categories.updateCategory(oldCategory);
+            ((Text)list.getItems().get(index).getChildren().get(0)).setText(textField.getText());
+            
+            stage.close();
+           }
+           else{
+               //TODO: label de erro
+           }
        });
        
        textField.setOnAction(e->{
-            categories.updateCategoryById(index, textField.getText());
-           ((Text)items.get(index).getChildren().get(0)).setText(textField.getText());
-           stage.close();
+            if(!categories.exists(textField.getText())){
+                Category oldCategory = categories.getCategoryById(items.get(index).getId());
+                oldCategory.setNome(textField.getText());
+                categories.updateCategory(oldCategory);
+                ((Text)list.getItems().get(index).getChildren().get(0)).setText(textField.getText());
+                stage.close();
+           }
+           else{
+               //TODO: label de erro
+           }
        });
        
        buttonCancel.setOnAction(e -> {
@@ -199,7 +226,8 @@ public class CategoryView {
        if(alert.getResult() == ButtonType.YES){
            int index = list.getSelectionModel().getSelectedIndex();
            list.getItems().remove(index);
-           categories.deleteCategoryById(index);
+           Category toDelete = categories.getCategoryById(items.get(index).getId());
+           categories.deleteCategory(toDelete);
        }
    }
 
@@ -226,15 +254,25 @@ public class CategoryView {
        buttonCancel.setFont(Font.font("Segoe UI", 18));
        
        buttonOk.setOnAction(e->{
-           categories.addCategory(textField.getText());
-           setContent(textField.getText());
-           stage.close();
+           if(!categories.exists(textField.getText())){
+            categories.addCategory(new Category(textField.getText()));
+            setContent(new Category(textField.getText()));
+            stage.close();
+           }
+           else{
+               //TODO: mensagem de erro
+           }    
        });
        
        textField.setOnAction(e->{
-           categories.addCategory(textField.getText());
-           setContent(textField.getText());
-           stage.close();
+           if(!categories.exists(textField.getText())){
+            categories.addCategory(new Category(textField.getText()));
+            setContent(new Category(textField.getText()));
+            stage.close();
+           }
+           else{
+               //TODO: mensagem de erro
+           }    
        });
        
        buttonCancel.setOnAction(e -> {
