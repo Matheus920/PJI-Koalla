@@ -1,8 +1,6 @@
-
 package app.data;
 
-import app.data.CategoryDAOInterface;
-import app.model.Category;
+import app.model.Criteria;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,22 +12,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class CategoryDAO implements CategoryDAOInterface {
-    private Connection conexao;
-    private static final String SQL_INSERT = "INSERT INTO categoria(nome) VALUES (?);";
-    private static final String SQL_SELECT = "SELECT * FROM categoria;";
-    private static final String SQL_UPDATE = "UPDATE categoria SET nome = ? WHERE id = ?;";
-    private static final String SQL_DELETE = "DELETE FROM categoria WHERE id = ?";
-    private static final String SQL_SELECT_WHERE = "SELECT * FROM categoria WHERE nome = ?;";
-    private static final String SQL_SELECT_WHERE_ID = "SELECT * FROM categoria WHERE id = ?;";
+public class CriteriaDAO implements CriteriaDAOInterface{
+     private Connection conexao;
+    private static final String SQL_INSERT = "INSERT INTO criterio(nome, descricao) VALUES (?, ?);";
+    private static final String SQL_SELECT = "SELECT * FROM criterio;";
+    private static final String SQL_UPDATE = "UPDATE criterio SET nome = ?, descricao = ? WHERE id = ?;";
+    private static final String SQL_DELETE = "DELETE FROM criterio WHERE id = ?";
+    private static final String SQL_SELECT_WHERE = "SELECT * FROM criterio WHERE nome = ?;";
+    private static final String SQL_SELECT_WHERE_ID = "SELECT * FROM criterio WHERE id = ?;";
     
     @Override
-    public Category addCategory(Category category){
+    public Criteria addCriteria(Criteria criteria){
         conexao = ConnectionMySQL.openConnection();
         try{
             PreparedStatement preparedStatement = conexao.prepareStatement(SQL_INSERT,
                     Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, category.getNome());
+            preparedStatement.setString(1, criteria.getNome());
+            preparedStatement.setString(2, criteria.getDescricao());
             preparedStatement.executeUpdate();
             
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -39,20 +38,20 @@ public class CategoryDAO implements CategoryDAOInterface {
                 id = resultSet.getLong(1);
             }
             
-            category.setId(id);
+            criteria.setId(id);
             
         }
         catch(SQLException ex){
-            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CriteriaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         ConnectionMySQL.closeConnection(conexao);
-        return category;
+        return criteria;
     }
     
     @Override
-    public List<Category> getAllCategories(){
-        List<Category> resultados = new ArrayList<>();
+    public List<Criteria> getAllCriteria(){
+        List<Criteria> resultados = new ArrayList<>();
         
         conexao = ConnectionMySQL.openConnection();
         try{
@@ -61,14 +60,15 @@ public class CategoryDAO implements CategoryDAOInterface {
             ResultSet resultSet = preparedStatement.executeQuery();
             
             while(resultSet.next()){
-                Category category = new Category(resultSet.getString(2));
-                category.setId(resultSet.getLong(1));
-                resultados.add(category);
+                Criteria criteria = new Criteria(resultSet.getString(2));
+                criteria.setId(resultSet.getLong(1));
+                criteria.setDescricao(resultSet.getString(3));
+                resultados.add(criteria);
             }
             
         }
         catch(SQLException ex){
-            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CriteriaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         ConnectionMySQL.closeConnection(conexao);
         return resultados;
@@ -77,36 +77,37 @@ public class CategoryDAO implements CategoryDAOInterface {
    
     
     @Override
-    public void updateCategory(Category category){
+    public void updateCriteria(Criteria criteria){
         conexao = ConnectionMySQL.openConnection();
         
         try{
             
             PreparedStatement preparedStatement = conexao.prepareStatement(SQL_UPDATE);
-            preparedStatement.setString(1, category.getNome());
-            preparedStatement.setLong(2, category.getId());
+            preparedStatement.setString(1, criteria.getNome());
+            preparedStatement.setLong(3, criteria.getId());
+            preparedStatement.setString(2, criteria.getDescricao());
             preparedStatement.executeUpdate();
             }
            
                 
         
         catch(SQLException ex){
-            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CriteriaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         ConnectionMySQL.closeConnection(conexao);
     }
     
     @Override
-    public void deleteCategory(Category category){
+    public void deleteCriteria(Criteria criteria){
         conexao = ConnectionMySQL.openConnection();
         
         try{
             PreparedStatement preparedStatement = conexao.prepareStatement(SQL_DELETE);
-            preparedStatement.setLong(1, category.getId());
+            preparedStatement.setLong(1, criteria.getId());
             preparedStatement.executeUpdate();
         }
         catch(SQLException ex){
-            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CriteriaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         ConnectionMySQL.closeConnection(conexao);
     }
@@ -125,16 +126,16 @@ public class CategoryDAO implements CategoryDAOInterface {
            } 
         }
         catch(SQLException ex){
-            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CriteriaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         ConnectionMySQL.closeConnection(conexao);
         return resultado;
     }
     
     @Override
-    public Category getCategoryById(long id){
+    public Criteria getCriteriaById(long id){
         conexao = ConnectionMySQL.openConnection();
-        Category category = null;
+        Criteria criteria = null;
         try{
             PreparedStatement preparedStatement = conexao.prepareStatement(SQL_SELECT_WHERE_ID);
             preparedStatement.setLong(1, id);
@@ -142,23 +143,23 @@ public class CategoryDAO implements CategoryDAOInterface {
             ResultSet resultSet = preparedStatement.executeQuery();
             
             if(resultSet.next()){
-                category = new Category(resultSet.getLong(1), resultSet.getString(2));
+                criteria = new Criteria(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3));
             }
         }
         catch(SQLException ex){
-            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CriteriaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return category;
+        return criteria;
     }
     
     
     @Override
-    public List<String> getAllCategoriesNames() {
+    public List<String> getAllCriteriaNames() {
         List<String> resultados = new ArrayList<>();
         
         conexao = ConnectionMySQL.openConnection();
         try{
-            PreparedStatement preparedStatement = conexao.prepareStatement("SELECT nome FROM categoria;");
+            PreparedStatement preparedStatement = conexao.prepareStatement("SELECT nome FROM criterio;");
             
             ResultSet resultSet = preparedStatement.executeQuery();
             
@@ -168,9 +169,10 @@ public class CategoryDAO implements CategoryDAOInterface {
             
         }
         catch(SQLException ex){
-            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CriteriaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         ConnectionMySQL.closeConnection(conexao);
         return resultados;
     }
+    
 }

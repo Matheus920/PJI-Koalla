@@ -11,5 +11,6 @@ public interface CategoryDAOInterface {
     public void deleteCategory(Category category);
     public Category getCategoryById(long id);
     public List<Category> getAllCategories();
-  
+    public boolean exists(String name);
+    public List<String> getAllCategoriesNames();
 }
