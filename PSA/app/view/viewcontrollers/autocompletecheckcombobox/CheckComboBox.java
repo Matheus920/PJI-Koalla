@@ -105,5 +105,9 @@ public class CheckComboBox<T> extends ComboBox<CheckBox> {
         return selectedItems;
     }
     
-    
+    public List<Integer> getSelectedItemsIds() {
+        List<Integer> values = new ArrayList<>();
+        values.addAll(itemsMap.values());
+        return values;
+    }
 }
