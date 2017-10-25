@@ -8,7 +8,8 @@ nome varchar(255) default null);
 
 create table criterio(
 id int not null primary key auto_increment,
-nome varchar(255) default null);
+nome varchar(255) default null,
+descricao varchar(1024) default null);
 
 create table usuario(
 id int not null primary key auto_increment,
@@ -117,9 +118,15 @@ references professor(id));
 
 insert into usuario(email, senha, privilegio) values ('comite', 'comite', 4),
 ('admin', 'admin', 0),
+
+
 ('avaliador', 'avaliador', 2),
 ('usuario', 'usuario', 1);
 
 select privilegio from usuario where email = 'comite' and senha = 'comite';
 select * from usuario;
--- drop database pji;
+select * from categoria;
+select * from criterio;
+drop database pji;
+
+insert into criterio(nome, descricao) values('teste2', 'testinho');
