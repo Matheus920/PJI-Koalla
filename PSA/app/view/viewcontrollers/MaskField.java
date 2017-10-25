@@ -117,4 +117,14 @@ public abstract class MaskField {
             }
         });
     }
+
+    public static void maxField(TextField textField, int max) {
+        textField.setOnKeyTyped((KeyEvent event)->{
+            textField.textProperty().addListener(e->{
+                if(Integer.parseInt(textField.getText()) > max) {
+                    textField.setText(Integer.toString(max-1));
+                }
+            });
+        });
+    }
 }
