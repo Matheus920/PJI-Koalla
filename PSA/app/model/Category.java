@@ -31,4 +31,9 @@ public class Category {
         this.nome = nome;
     }
     
+    @Override
+    public String toString() {
+        return "ID: " + getId()
+                + "\nNome: " + getNome();
+    }
 }
