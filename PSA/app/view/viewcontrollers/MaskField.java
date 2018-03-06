@@ -6,8 +6,8 @@ import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -117,22 +117,34 @@ public abstract class MaskField {
             }
         });
     }
-    
-    public static void maxField(TextField textField, int max){
-        String maxString = Integer.toString(max);
+
+    public static void maxField(TextField textField, int max) {
+       textField.setOnKeyTyped(e->{
+           if(e.getCode() == KeyCode.BACK_SPACE || e.getCode() == KeyCode.DELETE){
+               textField.setText("");
+           }
+       });
         
-        textField.textProperty().addListener((obv, nv, ov) ->{
-            if(textField.getText() != null && 
-                    !(textField.getText().equals(""))){
+        textField.textProperty().addListener(e->{
+            
+            
+            if(!(textField.getText() == null || textField.getText().equals(""))){
                 if(Integer.parseInt(textField.getText()) > max) {
-                    textField.setText("" + (max-1));
+                   textField.setText(Integer.toString(max));
+                }else if(Integer.parseInt(textField.getText()) == 0){
+                    textField.setText(null);
                 }
-                textField.setOnKeyTyped(e->{
-                    if(textField.getText().length() >= maxString.length()){
-                        e.consume();
-                    }
-                });
             }
-        }); 
+        });
+    }
+    
+    public static void maxLength(TextInputControl textInputControl, int max){
+        textInputControl.setOnKeyTyped((KeyEvent event)->{
+            if(!(textInputControl.getText() == null || textInputControl.getText().equals(""))){
+                if(textInputControl.getText().length() == max){
+                    event.consume();
+                }
+            }
+        });
     }
 }
