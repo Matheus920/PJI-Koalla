@@ -13,44 +13,44 @@ public interface PrivilegiesButtonsInterface extends PrivilegeTypeInterface{
     
     public static class AdminButtons {
         public static final int EVENT = 0;
-        public static final int CALENDAR = 1;
-        public static final int SPEAKER = 2;
-        public static final int EVALUATORS = 3;
-        public static final int BOARD = 4;
-        public static final int CATEGORY = 5;
+       // public static final int CALENDAR = 1;
+        public static final int SPEAKER = 1;
+        public static final int EVALUATORS = 2;
+        public static final int BOARD = 3;
+        public static final int CATEGORY = 4;
     }
     
     public static class UserButtons{
         public static final int EVENT = 0;
-        public static final int CALENDAR = 1;
-        public static final int SPEAKER = 2;
-        public static final int EVALUATORS = 3;
-        public static final int BOARD = 4;
+        //public static final int CALENDAR = 1;
+        public static final int SPEAKER = 1;
+        public static final int EVALUATORS = 2;
+        public static final int BOARD = 3;
     }
     
     public static class EvaluatorButtons{
         public static final int EVENT = 0;
-        public static final int CALENDAR = 1;
-        public static final int SPEAKER = 2;
-        public static final int EVALUATORS = 3;
-        public static final int BOARD = 4;
-        public static final int EVALUATION = 5;
+        //public static final int CALENDAR = 1;
+        public static final int SPEAKER = 1;
+        public static final int EVALUATORS = 2;
+        public static final int BOARD = 3;
+        public static final int EVALUATION = 4;
     }
     
     public static class notLoggedButtons{
         public static final int EVENT = 0;
-        public static final int CALENDAR = 1;
-        public static final int SPEAKER = 2;
-        public static final int EVALUATORS = 3;
-        public static final int BOARD = 4;
+        //public static final int CALENDAR = 1;
+        public static final int SPEAKER = 1;
+        public static final int EVALUATORS = 2;
+        public static final int BOARD = 3;
     }
     
     public static class BoardButtons{
         public static final int EVENT = 0;
-        public static final int CALENDAR = 1;
-        public static final int SPEAKER = 2;
-        public static final int EVALUATORS = 3;
-        public static final int BOARD = 4;
-        public static final int CRITERIA = 5;
+        //public static final int CALENDAR = 1;
+        public static final int SPEAKER = 1;
+        public static final int EVALUATORS = 2;
+        public static final int BOARD = 3;
+        public static final int CRITERIA = 4;
     }
 }

@@ -1,12 +1,8 @@
 package app.control.interfaces;
 
-import java.util.List;
+import app.data.CriteriaDAOInterface;
 
 
-public interface CRUDCriteriaInterface {
-    public List<String> getAllCriteria();
-    public String getCriteriaById(int id);
-    public void deleteCriteriaById(int id);
-    public void updateCriteriaById(int id, String value);
-    public void addCriteria(String value);
+public interface CRUDCriteriaInterface extends CriteriaDAOInterface{
+   
 }
