@@ -1,12 +1,19 @@
 package app;
 
+import app.control.CRUDBoard;
 import app.control.CRUDCategoryTest;
 import app.control.CRUDCriteria;
 import app.control.CRUDEvaluator;
+import app.control.CRUDEvent;
 import app.control.CRUDListSymposiumsTest;
 import app.control.CRUDSymposiumTest;
+import app.control.CRUDUser;
 import app.control.PrivilegiesTest;
 import app.control.interfaces.PrivilegeTypeInterface;
+import app.model.Board;
+import app.model.Evaluator;
+import app.model.Event;
+import app.model.User;
 import app.view.BoardView;
 import app.view.CategoryView;
 import app.view.CriteriaView;
@@ -40,18 +47,27 @@ public class Main extends Application{
     private static BorderPane root = new BorderPane();
     private static HeaderView header;
     private static Scene scene;
-    // TODO: tirar botão do comitê
-    private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeTypeInterface.EVALUATOR);
+    private static PrivilegiesTest test = new PrivilegiesTest(PrivilegeTypeInterface.NOTLOGGED);
     private static CRUDCategoryTest test1 = new CRUDCategoryTest();
     private static CRUDListSymposiumsTest test2 = new CRUDListSymposiumsTest();
     private static CRUDEvaluator test3 = new CRUDEvaluator();
     private static CRUDCriteria test4 = new CRUDCriteria();
+    private static CRUDBoard test5 = new CRUDBoard();
+    private static CRUDUser test6 = new CRUDUser();
+    private static CRUDEvent test7 = new CRUDEvent();
+    private static Board board = new Board();
+    private static Evaluator evaluator = new Evaluator();
+    private static User user = new User();
     
     private static int width;
     private static int height;
     
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    public static PrivilegeTypeInterface getPrivilege() {
+        return test;
     }
     
     public static Stage getPrimaryStage() {
@@ -70,7 +86,25 @@ public class Main extends Application{
         setRight();
         setLeft();
         setBottom();
+        eventShow();
         primaryStage.show();
+    }
+    public static void refresh(){
+        Stage stage = getPrimaryStage();
+        primaryStage.close();
+        root = new BorderPane();
+        primaryStage = stage;
+        setup();
+        setTop();
+        setRight();
+        setLeft();
+        setBottom();
+        eventShow();
+        primaryStage.show();
+    }
+    
+    public static void refreshBottom(){
+        root.setBottom(null);
     }
     
     public static void categoryShow(){
@@ -86,13 +120,13 @@ public class Main extends Application{
         header.refresh();
         header.setTitleAndSubTitle("Evento", "Veja os eventos que estão acontecendo ou que já foram encerrados.");
         root.setTop(header.headerShow());
-        root.setCenter(new EventView(test1, test2, test).eventShow());
+        root.setCenter(new EventView(test1, new CRUDListSymposiumsTest(), test, test7).eventShow());
     }
     
-    public static void symposiumShow(String[] id) {
-        CRUDSymposiumTest test3 = new CRUDSymposiumTest(id);
+    public static void symposiumShow(Event event) {
+        CRUDSymposiumTest test3 = new CRUDSymposiumTest(event);
         SymposiumView sv = new SymposiumView(test3, test);
-        HeaderView header1 = new HeaderView(test, id[0], null);
+        HeaderView header1 = new HeaderView(test, event.getTitulo(), null);
         root.setTop(header1.headerShow());
         root.setCenter(sv.symposiumShow());
         root.setBottom(sv.getBottom());
@@ -102,14 +136,14 @@ public class Main extends Application{
         header.refresh();
         header.setTitleAndSubTitle("Comitê", "Lista de membros do comitê acadêmico do IFSP");
         root.setTop(header.headerShow());
-        root.setCenter(new BoardView(test).boardShow());
+        root.setCenter(new BoardView(test, test5).boardShow());
     }
     
     public static void speakerShow() {
         header.refresh();
         header.setTitleAndSubTitle("Palestrante", "Lista de palestrantes registrados");
         root.setTop(header.headerShow());
-        root.setCenter(new SpeakerView(test).speakerShow());
+        root.setCenter(new SpeakerView(test, test6).speakerShow());
     }
     
     public static void evaluationShow() {
@@ -167,8 +201,8 @@ public class Main extends Application{
         width = d.width;
         height = d.height;
         
-        scene = new Scene(root, width*0.8, height*0.8);
-        primaryStage.setMinWidth(d.width*0.8-400);
+        scene = new Scene(root, width*0.85, height*0.8);
+        primaryStage.setMinWidth(d.width*0.85-400);
         primaryStage.setMinHeight(400);
         primaryStage.setTitle("Portal de Simpósio Acadêmico");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("koala1.png")));
@@ -192,5 +226,29 @@ public class Main extends Application{
         for(Labeled a : args) {
             a.setFont(Font.font("Segoe UI", 15));
         }
+    }
+
+    public static Board getBoard() {
+        return board;
+    }
+
+    public static void setBoard(Board board) {
+        Main.board = board;
+    }
+
+    public static Evaluator getEvaluator() {
+        return evaluator;
+    }
+
+    public static void setEvaluator(Evaluator evaluator) {
+        Main.evaluator = evaluator;
+    }
+
+    public static User getUser() {
+        return user;
+    }
+
+    public static void setUser(User user) {
+        Main.user = user;
     }
 }
