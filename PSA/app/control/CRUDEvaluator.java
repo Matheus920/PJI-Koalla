@@ -1,50 +1,74 @@
 package app.control;
 
 import app.control.interfaces.CRUDEvaluatorInterface;
-import java.util.ArrayList;
+import app.data.EvaluatorDAO;
+import app.model.Category;
+import app.model.Evaluator;
+import app.model.Event;
 import java.util.List;
 
 public class CRUDEvaluator implements CRUDEvaluatorInterface {
-    
-    private List<String> list;
-    
-    
-    
-    public CRUDEvaluator(){
-        list = new ArrayList<>();
-        setList("Glayson", "Hernando", "Manuel", "Matheus", "Amanda", "Denis", "Arnaldo", "Cesar", "Douglas");
-    }
-    
-    
-    private void setList(String... args){
-        for(String a : args){
-            list.add(a);
-        }
-    }
-   
+
     @Override
-    public List<String> getAllEvaluators() {
-        return list;
+    public List<Evaluator> getAllTeachers() {
+        return new EvaluatorDAO().getAllTeachers();
     }
 
     @Override
-    public String getEvaluatorById(int id) {
-        return list.get(id);
+    public List<Evaluator> getAllEvaluators() {
+        return new EvaluatorDAO().getAllEvaluators();
+    }
+
+    @Override
+    public void updateEvaluator(Evaluator evaluator) {
+        new EvaluatorDAO().updateEvaluator(evaluator);
+    }
+
+    @Override
+    public Evaluator getEvaluatorById(long index) {
+        return new EvaluatorDAO().getEvaluatorById(index);
+    }
+
+    @Override
+    public boolean exists(String id) {
+        return new EvaluatorDAO().exists(id);
+    }
+
+    @Override
+    public List<Evaluator> getOnlyTeachers() {
+        return new EvaluatorDAO().getOnlyTeachers();
+    }
+
+    @Override
+    public void turnEvaluator(Evaluator evaluator) {
+        new EvaluatorDAO().turnEvaluator(evaluator);
+    }
+
+    @Override
+    public void addAnEvaluatorInAnEvent(Event event, Evaluator evaluator) {
+        new EvaluatorDAO().addAnEvaluatorInAnEvent(event, evaluator);
+    }
+
+    @Override
+    public List<Event> getAllEventsByEvaluator(Evaluator evaluator) {
+        return new EvaluatorDAO().getAllEventsByEvaluator(evaluator);
+    }
+
+    @Override
+    public void addInACategoryInAnEvaluator(Category category, Evaluator evaluator) {
+        new EvaluatorDAO().addInACategoryInAnEvaluator(category, evaluator);
+    }
+
+    @Override
+    public List<Category> getAllCategoriesByEvaluator(Evaluator evaluator) {
+        return new EvaluatorDAO().getAllCategoriesByEvaluator(evaluator);
+    }
+
+    @Override
+    public void deleteAllEvaluatorsCategories(Evaluator evaluator) {
+        new EvaluatorDAO().deleteAllEvaluatorsCategories(evaluator);
     }
     
-    @Override
-    public void deleteEvaluator(int id) {
-        list.remove(id);
-    }
-
-    @Override
-    public void updateEvaluator(int id, String value) {
-        list.set(id, value);
-    }
-
-    @Override
-    public void addEvaluator(String value) {
-        list.add(value);
-    }
+    
     
 }

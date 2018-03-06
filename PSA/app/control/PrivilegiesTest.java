@@ -29,7 +29,6 @@ public class PrivilegiesTest implements PrivilegiesButtonsInterface {
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
-        list.add("Calendário");
         list.add("Palestrante");
         list.add("Avaliadores");
         list.add("Comitê");
@@ -41,7 +40,6 @@ public class PrivilegiesTest implements PrivilegiesButtonsInterface {
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
-        list.add("Calendário");
         list.add("Palestrante");
         list.add("Avaliadores");
         list.add("Comitê");
@@ -52,7 +50,6 @@ public class PrivilegiesTest implements PrivilegiesButtonsInterface {
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
-        list.add("Calendário");
         list.add("Palestrante");
         list.add("Avaliadores");
         list.add("Comitê");
@@ -64,7 +61,6 @@ public class PrivilegiesTest implements PrivilegiesButtonsInterface {
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
-        list.add("Calendário");
         list.add("Palestrante");
         list.add("Avaliadores");
         list.add("Comitê");
@@ -76,7 +72,6 @@ public class PrivilegiesTest implements PrivilegiesButtonsInterface {
         if(!list.isEmpty())
             list.clear();
         list.add("Evento");
-        list.add("Calendário");
         list.add("Palestrante");
         list.add("Avaliadores");
         list.add("Comitê");
