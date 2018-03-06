@@ -24,15 +24,21 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import app.control.interfaces.CRUDCategoryInterface;
+import app.model.Category;
+import app.view.viewcontrollers.MaskField;
+import javafx.geometry.HPos;
 import javafx.scene.input.KeyCode;
 
 public class CategoryView {
-    private final ObservableList<AnchorPane> items  = FXCollections.observableArrayList();
-    private final ListView<AnchorPane> list = new ListView(items);
+    private final ObservableList<Category> items  = FXCollections.observableArrayList();
+    private final ListView<AnchorPane> list = new ListView();
     private final CRUDCategoryInterface categories;
+    private final Label lblOk = new Label("");
     
     public CategoryView(CRUDCategoryInterface categories) {
+        Main.refreshBottom();
         this.categories = categories;
+        lblOk.setStyle("-fx-text-fill: red;");
     }
     
     public ListView getCategoryList(){
@@ -42,14 +48,15 @@ public class CategoryView {
     }
     
     private  void setItems(){
-        setContent(categories.getAllCategories());
+       setContent(categories.getAllCategories());
     }
     
     
-    private void setContent(String... content) {
-        for(String a : content) {
+    private void setContent(Category... content) {
+        for(Category a : content) {
+            items.add(a);
             AnchorPane anchorPane = new AnchorPane();
-            Text text = new Text(a);
+            Text text = new Text(a.getNome());
             Button btn = new Button("X");
             btn.setMinSize(5, 3);
             btn.setFont(Font.font("Segoe UI", 10));
@@ -66,14 +73,15 @@ public class CategoryView {
             AnchorPane.setTopAnchor(btn, 2.0);
             AnchorPane.setBottomAnchor(text, 3.0);
             
-            items.add(anchorPane);
+            list.getItems().add(anchorPane);
         }
     }
     
-    private void setContent(List<String> content) {
-        for(String a : content) {
+    private void setContent(List<Category> content) {
+        for(Category a : content) {
+            items.add(a);
             AnchorPane anchorPane = new AnchorPane();
-            Text text = new Text(a);
+            Text text = new Text(a.getNome());
             Button btn = new Button("X");
             btn.setMinSize(5, 3);
             btn.setFont(Font.font("Segoe UI", 10));
@@ -92,7 +100,7 @@ public class CategoryView {
             
 
             
-            items.add(anchorPane);
+            list.getItems().add(anchorPane);
         }
     }
     
@@ -108,17 +116,29 @@ public class CategoryView {
             oldv.getChildren().get(1).visibleProperty().set(false);
         });
         
-        list.setOnMouseClicked(e -> {
-            if(e.getClickCount() == 2){
-               showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
-            }
-        });
+  
         
-        list.setOnKeyPressed(e->{
-            if(e.getCode() == KeyCode.ENTER) {
-               showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
-            }
-        });
+        
+            list.setOnMouseClicked(e -> {
+                if(list.getSelectionModel().getSelectedItem() != null){
+                    if(e.getClickCount() == 2){
+                       if(!list.getItems().isEmpty())
+                       showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
+                    }
+                }
+            });
+            
+        
+        
+            list.setOnKeyPressed(e->{
+                if(list.getSelectionModel().getSelectedItem() != null){
+                    if(e.getCode() == KeyCode.ENTER) {
+                       if(!list.getItems().isEmpty())
+                       showEditDialog(((Text)list.getSelectionModel().getSelectedItem().getChildren().get(0)).getText(), list.getSelectionModel().getSelectedIndex());
+                    }
+                }
+            });
+    
         
         list.setCursor(Cursor.HAND);
     }
@@ -133,6 +153,8 @@ public class CategoryView {
        Label label = new Label("Categoria:");
        TextField textField = new TextField(editText);
        
+       MaskField.maxLength(textField, 255);
+       
        label.setFont(Font.font("Segoe UI", 18));
        textField.setFont(Font.font("Segoe UI", 18));
        
@@ -146,15 +168,39 @@ public class CategoryView {
        buttonCancel.setFont(Font.font("Segoe UI", 18));
        
        buttonOk.setOnAction(e->{
-           categories.updateCategoryById(index, textField.getText());
-           ((Text)items.get(index).getChildren().get(0)).setText(textField.getText());
-           stage.close();
+           if(textField.getText() == null || textField.getText().equals("")){
+               lblOk.setText("* Campo categoria está vazio");
+           }
+           else {
+            if(!categories.exists(textField.getText())){
+                Category oldCategory = categories.getCategoryById(items.get(index).getId());
+                oldCategory.setNome(textField.getText());
+                categories.updateCategory(oldCategory);
+                ((Text)list.getItems().get(index).getChildren().get(0)).setText(textField.getText());
+                stage.close();
+            }
+            else{
+               lblOk.setText("Categoria já cadastrada no sistema.");
+            }
+          }   
        });
        
        textField.setOnAction(e->{
-            categories.updateCategoryById(index, textField.getText());
-           ((Text)items.get(index).getChildren().get(0)).setText(textField.getText());
-           stage.close();
+           if(textField.getText() == null || textField.getText().equals("")){
+               lblOk.setText("* Campo categoria está vazio");
+           }
+           else {
+            if(!categories.exists(textField.getText())){
+                Category oldCategory = categories.getCategoryById(items.get(index).getId());
+                oldCategory.setNome(textField.getText());
+                categories.updateCategory(oldCategory);
+                ((Text)list.getItems().get(index).getChildren().get(0)).setText(textField.getText());
+                stage.close();
+            }
+            else{
+               lblOk.setText("Categoria já cadastrada no sistema.");
+            }
+          }
        });
        
        buttonCancel.setOnAction(e -> {
@@ -166,13 +212,16 @@ public class CategoryView {
        
        hbox.setSpacing(5);
        
-       gridPane.add(label, 0, 0);
-       gridPane.add(textField, 1, 0);
+       GridPane.setColumnSpan(lblOk, GridPane.REMAINING);
+       
+       gridPane.add(lblOk, 0, 0);
+       gridPane.add(label, 0, 1);
+       gridPane.add(textField, 1, 1);
        
        gridPane.setHgap(10);
        gridPane.setVgap(20);
        
-       gridPane.add(hbox, 1, 1);
+       gridPane.add(hbox, 1, 2);
        
        hbox.setAlignment(Pos.BASELINE_RIGHT);
        
@@ -199,12 +248,13 @@ public class CategoryView {
        if(alert.getResult() == ButtonType.YES){
            int index = list.getSelectionModel().getSelectedIndex();
            list.getItems().remove(index);
-           categories.deleteCategoryById(index);
+           Category toDelete = categories.getCategoryById(items.get(index).getId());
+           categories.deleteCategory(toDelete);
        }
    }
 
     void showAddDialog() {
-        Stage stage = new Stage();
+       Stage stage = new Stage();
        
        stage.setTitle("Adicionar");
        stage.getIcons().add(new Image(getClass().getResourceAsStream("koala1.png")));
@@ -212,6 +262,9 @@ public class CategoryView {
        GridPane gridPane = new GridPane();
        Label label = new Label("Categoria:");
        TextField textField = new TextField();
+       
+       MaskField.maxLength(textField, 255);
+       
        
        label.setFont(Font.font("Segoe UI", 18));
        textField.setFont(Font.font("Segoe UI", 18));
@@ -226,16 +279,36 @@ public class CategoryView {
        buttonCancel.setFont(Font.font("Segoe UI", 18));
        
        buttonOk.setOnAction(e->{
-           categories.addCategory(textField.getText());
-           setContent(textField.getText());
-           stage.close();
+           if(textField.getText() == null || textField.getText().equals("")){
+               lblOk.setText("* Campo categoria está vazio");
+           }
+           else {
+            if(!categories.exists(textField.getText())){
+             categories.addCategory(new Category(textField.getText()));
+             setContent(new Category(textField.getText()));
+             stage.close();
+            }
+            else{
+                lblOk.setText("Categoria já cadastrada no sistema");
+            }
+           }
        });
        
        textField.setOnAction(e->{
-           categories.addCategory(textField.getText());
-           setContent(textField.getText());
-           stage.close();
-       });
+            if(textField.getText() == null || textField.getText().equals("")){
+               lblOk.setText("* Campo categoria está vazio");
+            }
+            else {
+                if(!categories.exists(textField.getText())){
+                 categories.addCategory(new Category(textField.getText()));
+                 setContent(new Category(textField.getText()));
+                 stage.close();
+                }
+                else{
+                    lblOk.setText("Categoria já cadastrada no sistema");
+                }
+            }
+        });
        
        buttonCancel.setOnAction(e -> {
            stage.close();
@@ -246,13 +319,17 @@ public class CategoryView {
        
        hbox.setSpacing(5);
        
-       gridPane.add(label, 0, 0);
-       gridPane.add(textField, 1, 0);
+       GridPane.setColumnSpan(lblOk, GridPane.REMAINING);
+       GridPane.setHalignment(lblOk, HPos.CENTER);
+       
+       gridPane.add(lblOk, 0, 0);
+       gridPane.add(label, 0, 1);
+       gridPane.add(textField, 1, 1);
        
        gridPane.setHgap(10);
        gridPane.setVgap(20);
        
-       gridPane.add(hbox, 1, 1);
+       gridPane.add(hbox, 1, 2);
        Main.setBackgroundWhite(gridPane);
        
        hbox.setAlignment(Pos.BASELINE_RIGHT);

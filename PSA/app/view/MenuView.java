@@ -65,9 +65,9 @@ public class MenuView {
             Main.boardShow();
         });
         
-        buttons.get(PrivilegiesButtonsInterface.AdminButtons.CALENDAR).setOnAction(e->{
+       // buttons.get(PrivilegiesButtonsInterface.AdminButtons.CALENDAR).setOnAction(e->{
             // TODO: chamar tela calendario
-        });
+     //});
         
         buttons.get(PrivilegiesButtonsInterface.AdminButtons.CATEGORY).setOnAction(e->{
             Main.categoryShow();
@@ -95,9 +95,9 @@ public class MenuView {
             Main.eventShow();
         });
         
-        buttons.get(PrivilegiesButtonsInterface.UserButtons.CALENDAR).setOnAction(e->{
+       // buttons.get(PrivilegiesButtonsInterface.UserButtons.CALENDAR).setOnAction(e->{
             // TODO: chamar tela calendario
-        });
+        //});
         
         buttons.get(PrivilegiesButtonsInterface.UserButtons.SPEAKER).setOnAction(e->{
             Main.speakerShow();
@@ -133,9 +133,9 @@ public class MenuView {
         });
         
        
-        buttons.get(PrivilegiesButtonsInterface.EvaluatorButtons.CALENDAR).setOnAction(e->{
+       // buttons.get(PrivilegiesButtonsInterface.EvaluatorButtons.CALENDAR).setOnAction(e->{
             // TODO: chamar tela calendario
-        });
+        //});
         
         buttons.get(PrivilegiesButtonsInterface.EvaluatorButtons.SPEAKER).setOnAction(e->{
             Main.speakerShow();
@@ -162,9 +162,9 @@ public class MenuView {
         });
         
         
-        buttons.get(PrivilegiesButtonsInterface.BoardButtons.CALENDAR).setOnAction(e->{
+       // buttons.get(PrivilegiesButtonsInterface.BoardButtons.CALENDAR).setOnAction(e->{
             // TODO: chamar tela calendario
-        }); 
+       // }); 
        
         buttons.get(PrivilegiesButtonsInterface.BoardButtons.EVALUATORS).setOnAction(e->{
             Main.evaluatorShow();

@@ -2,14 +2,13 @@ package app.view;
 
 import app.Main;
 import app.control.interfaces.PrivilegeTypeInterface;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -31,19 +30,12 @@ public class HeaderView {
     private final VBox vbox = new VBox(5);
     private final HBox hbox = new HBox(10);
     private final ImageView koallaImage = new ImageView(new Image(getClass().getResourceAsStream("koala.png")));
+    private final Button logout = new Button("Sair");
     
     private PrivilegeTypeInterface privilege;
     
     public HeaderView(PrivilegeTypeInterface privilege) {
         this.privilege = privilege;
-        /*koallaImage.setOnMouseClicked(e->{
-            try {
-                Runtime.getRuntime().exec("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe https://www.palcomp3.com/FlamengoOficial/hino-do-flamengo-hino-oficial/");
-                Runtime.getRuntime().exec("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe https://www.youtube.com/watch?v=I5fenjzeh7g");
-            } catch (IOException ex) {
-                Logger.getLogger(HeaderView.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });*/
         setTitle("Título");
         setSubtitle("Aqui vai a descrição do título");
         setLabels();
@@ -55,9 +47,34 @@ public class HeaderView {
         HBox.setMargin(vbox, new Insets(10, 0, 0, 10));
 
         anchorPane.getChildren().addAll(hbox, login);
+        
+        
+         if(Main.getPrivilege().getPrivilegeType() != 3){
+            switch(Main.getPrivilege().getPrivilegeType()){
+                case PrivilegeTypeInterface.BOARD:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+                case PrivilegeTypeInterface.EVALUATOR:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+                case PrivilegeTypeInterface.USER:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+                case PrivilegeTypeInterface.ADMIN:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+            }
+            AnchorPane.setRightAnchor(logout, 20.0);
+            AnchorPane.setTopAnchor(logout, 20.0);
+        }else{
+
+            AnchorPane.setRightAnchor(login, 20.0);
+            AnchorPane.setTopAnchor(login, 20.0);
+        }
        
-        AnchorPane.setRightAnchor(login, 20.0);
-        AnchorPane.setTopAnchor(login, 20.0);
+        
+       
+    
         AnchorPane.setLeftAnchor(hbox, 10.0);
     }
     
@@ -75,8 +92,7 @@ public class HeaderView {
 
         anchorPane.getChildren().addAll(hbox, login);
        
-        AnchorPane.setRightAnchor(login, 20.0);
-        AnchorPane.setTopAnchor(login, 20.0);
+
         AnchorPane.setLeftAnchor(hbox, 10.0);
         
         if(subtitle == null) {
@@ -84,6 +100,31 @@ public class HeaderView {
             HBox.setMargin(vbox, new Insets(30,0,0,0));
             hbox.spacingProperty().bind(Main.getPrimaryStage().widthProperty().divide(2).subtract(80+(((title.length()*11)/2))));
         } else setSubtitle(subtitle);
+        
+         if(Main.getPrivilege().getPrivilegeType() != 3){
+            switch(Main.getPrivilege().getPrivilegeType()){
+                case PrivilegeTypeInterface.BOARD:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+                case PrivilegeTypeInterface.EVALUATOR:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+                case PrivilegeTypeInterface.USER:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+                case PrivilegeTypeInterface.ADMIN:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+            }
+            AnchorPane.setRightAnchor(logout, 20.0);
+            AnchorPane.setTopAnchor(logout, 20.0);
+        }else{
+
+            AnchorPane.setRightAnchor(login, 20.0);
+            AnchorPane.setTopAnchor(login, 20.0);
+        }
+        
+        
     }
     
     public AnchorPane headerShow() {
@@ -94,6 +135,7 @@ public class HeaderView {
         koallaImage.setPreserveRatio(true);
         koallaImage.setFitHeight(90);
         koallaImage.setFitWidth(90);
+
     }
     
     private void setLabels(){
@@ -105,8 +147,42 @@ public class HeaderView {
        login.setFont(Font.font("Segoe UI", 15));
        login.setCursor(Cursor.HAND);
        login.setOnAction(e->{
-           new LoginView();
+           new LoginView(privilege);
        });
+       
+       logout.setFont(Font.font("Segoue UI", 15));
+       logout.setCursor(Cursor.HAND);
+       
+       logout.setOnAction(e->{
+            Alert alerta = new Alert(Alert.AlertType.WARNING, "Deseja realmente sair?", 
+            ButtonType.YES, ButtonType.NO);
+            alerta.setTitle("Atenção");
+            alerta.setHeaderText(null);
+            Stage stage = (Stage) alerta.getDialogPane().getScene().getWindow();
+            alerta.showAndWait();
+
+
+
+            if(alerta.getResult() == ButtonType.YES){
+
+                switch(Main.getPrivilege().getPrivilegeType()){
+                    case PrivilegeTypeInterface.BOARD:
+                        Main.setBoard(null);
+                        break;
+                    case PrivilegeTypeInterface.EVALUATOR:
+                        Main.setEvaluator(null);
+                        break;
+                    case PrivilegeTypeInterface.USER:
+                        Main.setUser(null);
+                        break;
+                }
+                Main.getPrivilege().setPrivilegeType(PrivilegeTypeInterface.NOTLOGGED);
+                stage.close();
+                Main.refresh();
+            } else{
+                stage.close();
+            }
+        });
     }
     
     public void setTitle(String title) {
@@ -126,8 +202,14 @@ public class HeaderView {
         add.setOnAction(e->{
             categoryView.showAddDialog();
         });
-        hbox1.getChildren().addAll(add, login);
+        if(privilege.getPrivilegeType() == PrivilegeTypeInterface.ADMIN){
+            hbox1.getChildren().addAll(add, logout);
+        }
+        
 
+        
+        
+        
         anchorPane.getChildren().add(hbox1);
 
         AnchorPane.setRightAnchor(hbox1, 20.0);
@@ -148,8 +230,10 @@ public class HeaderView {
         add.setOnAction(e->{
             criteriaView.showAddDialog();
         });
-        hbox1.getChildren().addAll(add, login);
-
+        
+        if(privilege.getPrivilegeType() == PrivilegeTypeInterface.BOARD){
+            hbox1.getChildren().addAll(add, logout);
+        }
         anchorPane.getChildren().add(hbox1);
 
         AnchorPane.setRightAnchor(hbox1, 20.0);
@@ -223,11 +307,33 @@ public class HeaderView {
         HBox.setMargin(vbox, new Insets(10, 0, 0, 10));
 
         anchorPane.getChildren().addAll(hbox, login);
-       
-        AnchorPane.setRightAnchor(login, 20.0);
-        AnchorPane.setTopAnchor(login, 20.0);
+
+        
+        if(Main.getPrivilege().getPrivilegeType() != 3){
+            switch(Main.getPrivilege().getPrivilegeType()){
+                case PrivilegeTypeInterface.BOARD:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+                case PrivilegeTypeInterface.EVALUATOR:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+                case PrivilegeTypeInterface.USER:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+                case PrivilegeTypeInterface.ADMIN:
+                    anchorPane.getChildren().set(1, logout);
+                    break;
+            }
+            AnchorPane.setRightAnchor(logout, 20.0);
+            AnchorPane.setTopAnchor(logout, 20.0);
+        }else{
+
+            AnchorPane.setRightAnchor(login, 20.0);
+            AnchorPane.setTopAnchor(login, 20.0);
+        }
         AnchorPane.setLeftAnchor(hbox, 10.0);
     }
+    
     
     public void setTitleAndSubTitle(String title, String subtitle) {
         setTitle(title);
