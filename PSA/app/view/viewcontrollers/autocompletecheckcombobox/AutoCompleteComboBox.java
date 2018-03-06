@@ -14,13 +14,13 @@ public class AutoCompleteComboBox<T> {
     
     ComboBox<T> comboBox = new ComboBox();
     ObservableList originalItems;
+    String comboBoxName;
     String filteredText = "";
-    String originalName;
+    
     public void bindAutoComplete(ComboBox<T> comboBox){
         this.comboBox = comboBox;
-        originalName = comboBox.getPromptText();
         originalItems = FXCollections.observableArrayList(comboBox.getItems());
-        //comboBox.setTooltip(new Tooltip());
+        comboBoxName = this.comboBox.getPromptText();
         comboBox.setOnKeyPressed(this::handleOnKeyPressed);
         comboBox.setOnHidden(this::handleOnHiding);
     }
@@ -44,20 +44,12 @@ public class AutoCompleteComboBox<T> {
         if(filteredText.length() == 0){
             filteredItens = originalItems;
             //comboBox.getTooltip().hide();
-            comboBox.setPromptText(originalName);
         }
         else{
             Stream<T> itens = comboBox.getItems().stream();
             String searchText = filteredText.toString().toLowerCase();
             itens.filter(el -> el.toString().toLowerCase().contains(searchText)).forEach(filteredItens::add);
             comboBox.setPromptText(searchText);
-            //comboBox.getTooltip().setText(searchText);
-            
-            //Window stage = comboBox.getScene().getWindow();
-            //double positionX = stage.getX() + comboBox.getBoundsInParent().getMinX();
-            //double positionY = stage.getY() + comboBox.getBoundsInParent().getMinY();
-            
-            //comboBox.getTooltip().show(stage, positionX, positionY);
             comboBox.show();
         }
         comboBox.getItems().setAll(filteredItens);
@@ -65,9 +57,8 @@ public class AutoCompleteComboBox<T> {
     
     public void handleOnHiding(Event e){
         filteredText = "";
-        //comboBox.getTooltip().hide();
+        comboBox.setPromptText(comboBoxName);
         T selected = comboBox.getSelectionModel().getSelectedItem();
-        comboBox.setPromptText(originalName);
         comboBox.getItems().setAll(originalItems);
         comboBox.getSelectionModel().select(selected);            
     }

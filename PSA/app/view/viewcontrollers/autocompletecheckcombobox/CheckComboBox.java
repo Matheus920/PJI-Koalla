@@ -3,7 +3,6 @@ package app.view.viewcontrollers.autocompletecheckcombobox;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +16,13 @@ public class CheckComboBox<T> extends ComboBox<CheckBox> {
     private ObservableList<T> checkItems;
     private ObservableList<T> selectedItems;
     private Map<T, Integer> itemsMap;
-    
+    private final ObservableList<CheckBox> x = FXCollections.<CheckBox>observableArrayList();
     public CheckComboBox(ObservableList<T> items) {
         super();
         setEditable(false);
         this.checkItems = FXCollections.<T>observableArrayList(items);
         this.selectedItems = FXCollections.<T>observableArrayList();
-        ObservableList<CheckBox> x = FXCollections.<CheckBox>observableArrayList();
+        
         itemsMap = new HashMap<T, Integer>();
         for(T a : checkItems) {
             CheckBox check = new CheckBox(a.toString());
@@ -57,13 +56,12 @@ public class CheckComboBox<T> extends ComboBox<CheckBox> {
         new AutoCompleteComboBox<CheckBox>().bindAutoComplete(this);
     }
 
-    public CheckComboBox(ObservableList<T> items, String title) {
+    public CheckComboBox(ObservableList<T> items, String text) {
         super();
-        super.setPromptText(title);
         setEditable(false);
+        setPromptText(text);
         this.checkItems = FXCollections.<T>observableArrayList(items);
         this.selectedItems = FXCollections.<T>observableArrayList();
-        ObservableList<CheckBox> x = FXCollections.<CheckBox>observableArrayList();
         itemsMap = new HashMap<T, Integer>();
         for(T a : checkItems) {
             CheckBox check = new CheckBox(a.toString());
@@ -96,7 +94,7 @@ public class CheckComboBox<T> extends ComboBox<CheckBox> {
         super.setItems(x);
         new AutoCompleteComboBox<CheckBox>().bindAutoComplete(this);
     }
-    
+
     public ObservableList<T> getCheckItems() {
         return checkItems;
     }
@@ -105,5 +103,16 @@ public class CheckComboBox<T> extends ComboBox<CheckBox> {
         return selectedItems;
     }
     
+    public Collection<Integer> getSelectedIndexes(){
+        return itemsMap.values();
+    }
     
+    public void setSelectedIndexes(Collection<Integer> indexes){
+        for(Integer a : indexes){
+            ((CheckBox)x.get(a)).setSelected(true);
+        }
+        super.setItems(x);
+    }
+    
+  
 }
